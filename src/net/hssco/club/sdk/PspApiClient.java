@@ -14,6 +14,14 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
+
 /**
  * Factory for creating a Retrofit-backed {@link PspApiService} instance.
  */
@@ -41,10 +49,14 @@ public final class PspApiClient {
     }
 
     public static PspApiClient create(String baseUrl, boolean enableLogging) {
+        return create(baseUrl, enableLogging, false);
+    }
+
+    public static PspApiClient create(String baseUrl, boolean enableLogging, boolean trustAllCertificates) {
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
         loggingInterceptor.setLevel(enableLogging ? HttpLoggingInterceptor.Level.BODY : HttpLoggingInterceptor.Level.NONE);
 
-        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+        OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder()
                 .addInterceptor(loggingInterceptor)
                 .connectTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
@@ -58,8 +70,17 @@ public final class PspApiClient {
                 .addNetworkInterceptor(chain -> chain.proceed(
                         chain.request().newBuilder()
                                 .header("Connection", "close")
-                                .build()))
-                .build();
+                                .build()));
+
+        if (trustAllCertificates) {
+            TrustManager[] trustAllCerts = createTrustAllManagers();
+            SSLSocketFactory sslSocketFactory = createTrustAllSocketFactory(trustAllCerts);
+            okHttpClientBuilder
+                    .sslSocketFactory(sslSocketFactory, (X509TrustManager) trustAllCerts[0])
+                    .hostnameVerifier(createTrustAllHostnameVerifier());
+        }
+
+        OkHttpClient okHttpClient = okHttpClientBuilder.build();
 
         Gson gson = new GsonBuilder()
                 .serializeNulls()
@@ -81,5 +102,38 @@ public final class PspApiClient {
 
     public Retrofit getRetrofit() {
         return retrofit;
+    }
+
+    private static TrustManager[] createTrustAllManagers() {
+        return new TrustManager[] { new X509TrustManager() {
+            @Override
+            public void checkClientTrusted(X509Certificate[] chain, String authType) {
+                // Intentionally trusting all client certificates for development endpoints.
+            }
+
+            @Override
+            public void checkServerTrusted(X509Certificate[] chain, String authType) {
+                // Intentionally trusting all server certificates for development endpoints.
+            }
+
+            @Override
+            public X509Certificate[] getAcceptedIssuers() {
+                return new X509Certificate[0];
+            }
+        } };
+    }
+
+    private static SSLSocketFactory createTrustAllSocketFactory(TrustManager[] trustAllCerts) {
+        try {
+            SSLContext sslContext = SSLContext.getInstance("SSL");
+            sslContext.init(null, trustAllCerts, new SecureRandom());
+            return sslContext.getSocketFactory();
+        } catch (Exception e) {
+            throw new IllegalStateException("Unable to create trust-all SSL socket factory", e);
+        }
+    }
+
+    private static HostnameVerifier createTrustAllHostnameVerifier() {
+        return (hostname, session) -> true;
     }
 }
