@@ -13,6 +13,15 @@ import net.hssco.club.NavigationHelper;
 import net.hssco.club.data.model.Payment;
 import net.hssco.club.data.model.TransactionTypeIntent;
 import net.hssco.club.data.purchase.PurchaseImpl;
+import net.hssco.club.sdk.PspApiClient;
+import net.hssco.club.sdk.api.PspApiService;
+import net.hssco.club.sdk.model.LocalRequestClubCardChargeCommand;
+import net.hssco.club.sdk.model.LocalRequestClubCardChargeResult;
+import net.hssco.club.sdk.model.VerifyLocalRequestClubCardChargeCommand;
+import net.hssco.club.sdk.model.VerifyLocalRequestClubCardChargResult;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AmountActivity extends Activity {
 
@@ -20,6 +29,12 @@ public class AmountActivity extends Activity {
     private TextView amountInput;
     private String pan;
     private final StringBuilder amountBuilder = new StringBuilder();
+
+    private static final String PREFS_NAME       = "sajed_prefs";
+    private static final String KEY_SERVER_ADDR  = "server_addr";
+    private static final String KEY_SERVER_PORT  = "server_port";
+    private static final String KEY_TERMINAL_ID  = "terminal_id";
+    private static final String KEY_LICENSE      = "license";
 
 
     @Override
@@ -30,15 +45,15 @@ public class AmountActivity extends Activity {
 
             Payment payment = PurchaseImpl.getInstance().receiveResult(data);
             if (payment != null && payment.getResult() == 0) {
-
-                String msg = "charge|"
-                        + pan + "|"
-                        + amountBuilder.toString() + "|"
-                        + payment.getRrn() + "|"
-                        + payment.getCardNumber() + "|"
-                        + payment.getTerminalId();
-
-                callAddBalance(msg);
+                pan = payment.getCardNumber();
+                requestCharge(payment);
+            } else {
+                Intent fail = new Intent(AmountActivity.this, PaymentResultActivity.class);
+                fail.putExtra("status", "fail");
+                fail.putExtra("type", "charge");
+                fail.putExtra("message", payment != null ? payment.getMessage() : "پرداخت ناموفق");
+                startActivity(fail);
+                finish();
             }
 
         }
@@ -235,64 +250,182 @@ public class AmountActivity extends Activity {
         }
     }
 
-    private void callAddBalance(final String message) {
+    private void requestCharge(final Payment payment) {
 
-        new Thread(new Runnable() {
+        PspApiService service = createApiService();
+        if (service == null) {
+            Toast.makeText(this, "آدرس سرور نامعتبر است", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        final String stan = generateStan();
+        long amountValue = parseAmount(amountBuilder.toString());
+
+        LocalRequestClubCardChargeCommand command = new LocalRequestClubCardChargeCommand(
+                System.currentTimeMillis(),
+                100,
+                getLicense(),
+                "INIT",
+                "Charge",
+                getTodayDate(),
+                getCurrentTime(),
+                amountValue,
+                "REF" + stan,
+                getTerminalId(),
+                stan,
+                payment.getCardNumber(),
+                "VALID",
+                "0000",
+                "ANDROID",
+                "0000",
+                "123",
+                "Club charge",
+                "charge payload",
+                payment.getCardNumber()
+        );
+
+        service.chargeClubCard(command).enqueue(new Callback<LocalRequestClubCardChargeResult>() {
             @Override
-            public void run() {
-                try {
-                    String urlStr = "http://192.168.1.110:5212/api/Pos/AddBalance?message=" + message;
+            public void onResponse(Call<LocalRequestClubCardChargeResult> call,
+                                   Response<LocalRequestClubCardChargeResult> response) {
 
-                    java.net.URL url = new java.net.URL(urlStr);
-                    java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
-
-                    conn.setRequestMethod("POST");
-                    conn.setDoOutput(true);
-                    conn.setConnectTimeout(8000);
-                    conn.setReadTimeout(8000);
-                    conn.setRequestProperty("accept", "text/plain");
-
-                    int code = conn.getResponseCode();
-                    java.io.InputStream is = conn.getInputStream();
-
-                    java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
-                    final String result = s.hasNext() ? s.next() : "";
-
-                    conn.disconnect();
-
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if ("true".equalsIgnoreCase(result.trim())) {
-                                Intent ok = new Intent(AmountActivity.this, PaymentResultActivity.class);
-                                ok.putExtra("status", "success");
-                                ok.putExtra("type", "charge");
-                                startActivity(ok);
-                            } else {
-                                Intent fail = new Intent(AmountActivity.this, PaymentResultActivity.class);
-                                fail.putExtra("status", "fail");
-                                fail.putExtra("type", "charge");
-                                startActivity(fail);
-                            }
-                            finish();
-                        }
-                    });
-
-                } catch (final Exception e) {
-
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(AmountActivity.this,
-                                    "خطا در ارتباط با سرور",
-                                    Toast.LENGTH_LONG).show();
-                        }
-                    });
-
+                if (response.isSuccessful() && response.body() != null) {
+                    verifyCharge(stan, response.body());
+                } else {
+                    openChargeResult(false, null, "پاسخ شارژ معتبر نیست");
                 }
             }
-        }).start();
+
+            @Override
+            public void onFailure(Call<LocalRequestClubCardChargeResult> call, Throwable t) {
+                openChargeResult(false, null, t.getMessage());
+            }
+        });
     }
 
+    private void verifyCharge(final String stan, final LocalRequestClubCardChargeResult chargeResult) {
+
+        PspApiService service = createApiService();
+        if (service == null) {
+            openChargeResult(false, null, "آدرس سرور نامعتبر است");
+            return;
+        }
+
+        VerifyLocalRequestClubCardChargeCommand verifyCommand = new VerifyLocalRequestClubCardChargeCommand(
+                System.currentTimeMillis(),
+                100,
+                getTerminalId(),
+                stan
+        );
+
+        service.verifyCharge(verifyCommand).enqueue(new Callback<VerifyLocalRequestClubCardChargResult>() {
+            @Override
+            public void onResponse(Call<VerifyLocalRequestClubCardChargResult> call,
+                                   Response<VerifyLocalRequestClubCardChargResult> response) {
+
+                boolean success = response.isSuccessful();
+                String message = chargeResult != null ? chargeResult.getSpOutputMessage() : null;
+                openChargeResult(success, chargeResult, message);
+            }
+
+            @Override
+            public void onFailure(Call<VerifyLocalRequestClubCardChargResult> call, Throwable t) {
+                openChargeResult(false, chargeResult, t.getMessage());
+            }
+        });
+    }
+
+    private void openChargeResult(boolean success, LocalRequestClubCardChargeResult result,
+                                  String message) {
+
+        Intent intent = new Intent(AmountActivity.this, PaymentResultActivity.class);
+        intent.putExtra("status", success ? "success" : "fail");
+        intent.putExtra("type", "charge");
+        intent.putExtra("amount", amountBuilder.toString());
+        intent.putExtra("card", pan);
+        intent.putExtra("terminal", getTerminalId());
+        intent.putExtra("tracking", result != null ? result.getAccTableVersion() : null);
+        intent.putExtra("message", message);
+        startActivity(intent);
+        finish();
+    }
+
+    private PspApiService createApiService() {
+        try {
+            String base = getBaseUrl();
+            if (!base.endsWith("/")) {
+                base = base + "/";
+            }
+            return PspApiClient.create(base).getApiService();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private String getBaseUrl() {
+        android.content.SharedPreferences prefs =
+                getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+
+        String addr = prefs.getString(KEY_SERVER_ADDR, "192.168.0.2");
+        String port = prefs.getString(KEY_SERVER_PORT, "5212");
+
+        if (addr == null || addr.trim().length() == 0)
+            addr = "192.168.0.2";
+
+        if (port == null || port.trim().length() == 0)
+            port = "5212";
+
+        return "http://" + addr + ":" + port;
+    }
+
+    private String getTerminalId() {
+        android.content.SharedPreferences prefs =
+                getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+
+        return prefs.getString(KEY_TERMINAL_ID, "TERM001");
+    }
+
+    private String getLicense() {
+        android.content.SharedPreferences prefs =
+                getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+
+        return prefs.getString(KEY_LICENSE, "MERCHANT_PIN");
+    }
+
+    private String getTodayDate() {
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyyMMdd", java.util.Locale.US);
+        return sdf.format(new java.util.Date());
+    }
+
+    private String getCurrentTime() {
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("HHmmss", java.util.Locale.US);
+        return sdf.format(new java.util.Date());
+    }
+
+    private String generateStan() {
+        int value = new java.util.Random().nextInt(900000) + 100000;
+        return String.valueOf(value);
+    }
+
+    private long parseAmount(String amountString) {
+        try {
+            if (amountString == null) return 0L;
+            String clean = amountString
+                    .replaceAll(",", "")
+                    .replace("۰", "0")
+                    .replace("۱", "1")
+                    .replace("۲", "2")
+                    .replace("۳", "3")
+                    .replace("۴", "4")
+                    .replace("۵", "5")
+                    .replace("۶", "6")
+                    .replace("۷", "7")
+                    .replace("۸", "8")
+                    .replace("۹", "9");
+            return Long.parseLong(clean);
+        } catch (Exception e) {
+            return 0L;
+        }
+    }
 
 }

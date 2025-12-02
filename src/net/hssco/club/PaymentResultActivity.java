@@ -14,6 +14,10 @@ import android.device.PrinterManager;
 
 import com.google.gson.Gson;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 import net.hssco.club.data.model.Payment;
 
 public class PaymentResultActivity extends Activity {
@@ -29,6 +33,14 @@ public class PaymentResultActivity extends Activity {
 
     private boolean isSuccess = false;
     private boolean isCharge = false;
+    private boolean isBalance = false;
+
+    private String amountText;
+    private String cardText;
+    private String terminalText;
+    private String trackingText;
+    private String merchantText;
+    private String customMessage;
 
     private String supportNumber = "021-225542544";
 
@@ -77,8 +89,19 @@ public class PaymentResultActivity extends Activity {
         String status = getIntent().getStringExtra("status");
         String type   = getIntent().getStringExtra("type");
 
+        amountText   = getIntent().getStringExtra("amount");
+        cardText     = getIntent().getStringExtra("card");
+        terminalText = getIntent().getStringExtra("terminal");
+        trackingText = getIntent().getStringExtra("tracking");
+        merchantText = getIntent().getStringExtra("merchant");
+        customMessage = getIntent().getStringExtra("message");
+
         if ("charge".equals(type)) {
             isCharge = true;
+        }
+
+        if ("balance".equals(type)) {
+            isBalance = true;
         }
 
         if ("success".equalsIgnoreCase(status)) {
@@ -89,37 +112,81 @@ public class PaymentResultActivity extends Activity {
             try {
                 Payment p = new Gson().fromJson(json, Payment.class);
 
-                txtClub.setText("باشگاه مشتریان کنعانی");
-                txtBranch.setText("سالن کنعانی");
-                txtAmount.setText(p.getTotalAmount());
-                txtDate.setText("۱۴۰۴/۰۹/۰۲");
-                txtTime.setText("۱۴:۰۸");
-
-                txtTracking.setText(p.getRrn());
-                txtTerminal.setText(p.getTerminalId());
-                txtMerchant.setText(p.getMerchantName());
-                txtCard.setText(p.getCardNumber());
-
-                txtSupport.setText(supportNumber);
+                amountText = p.getTotalAmount();
+                trackingText = p.getRrn();
+                terminalText = p.getTerminalId();
+                merchantText = p.getMerchantName();
+                cardText = p.getCardNumber();
 
             } catch (Exception e) {
                 Toast.makeText(this, "خطا در پردازش نتیجه", Toast.LENGTH_SHORT).show();
             }
         }
 
+        applyDataToViews();
+
         applyUI();
+    }
+
+    private void applyDataToViews() {
+
+        txtClub.setText("باشگاه مشتریان کنعانی");
+        txtBranch.setText("سالن کنعانی");
+
+        if (amountText != null) {
+            txtAmount.setText(amountText);
+        }
+
+        if (trackingText != null) {
+            txtTracking.setText(trackingText);
+        }
+
+        if (terminalText != null) {
+            txtTerminal.setText(terminalText);
+        }
+
+        if (merchantText != null) {
+            txtMerchant.setText(merchantText);
+        }
+
+        if (cardText != null) {
+            txtCard.setText(cardText);
+        }
+
+        txtSupport.setText(supportNumber);
+
+        if (txtDate.getText().toString().trim().isEmpty()) {
+            txtDate.setText(getTodayDate());
+        }
+
+        if (txtTime.getText().toString().trim().isEmpty()) {
+            txtTime.setText(getCurrentTime());
+        }
+    }
+
+    private String getTodayDate() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
+        return sdf.format(new Date());
+    }
+
+    private String getCurrentTime() {
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.getDefault());
+        return sdf.format(new Date());
     }
 
     private void applyUI() {
 
         if (isSuccess) {
 
-            if (isCharge) {
-                txtTitle.setText("کارت با موفقیت شارژ شد");
+            if (isBalance) {
+                txtTitle.setText("استعلام موجودی موفق");
                 txtSubTitle.setText("");
+            } else if (isCharge) {
+                txtTitle.setText("کارت با موفقیت شارژ شد");
+                txtSubTitle.setText(customMessage != null ? customMessage : "");
             } else {
                 txtTitle.setText("پرداخت موفق");
-                txtSubTitle.setText("");
+                txtSubTitle.setText(customMessage != null ? customMessage : "");
             }
 
             imgStatus.setImageResource(R.drawable.recsuccess);
@@ -127,8 +194,12 @@ public class PaymentResultActivity extends Activity {
 
         } else {
 
-            txtTitle.setText("پرداخت ناموفق");
-            txtSubTitle.setText("رمز وارد شده صحیح نمی‌باشد");
+            txtTitle.setText("عملیات ناموفق");
+            if (customMessage != null) {
+                txtSubTitle.setText(customMessage);
+            } else {
+                txtSubTitle.setText("رمز وارد شده صحیح نمی‌باشد");
+            }
 
             imgStatus.setImageResource(R.drawable.reslogofail);
             boxBackground.setBackgroundResource(R.drawable.resfail);
@@ -169,9 +240,14 @@ public class PaymentResultActivity extends Activity {
 
         try {
 
-            String header = isCharge ?
-                    "   رسید افزایش موجودی\n" :
-                    "       رسید خرید موفق\n";
+            String header;
+            if (isBalance) {
+                header = "   رسید استعلام موجودی\n";
+            } else if (isCharge) {
+                header = "   رسید افزایش موجودی\n";
+            } else {
+                header = "       رسید خرید موفق\n";
+            }
 
             String txt =
                     header +
