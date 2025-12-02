@@ -9,6 +9,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.gson.Gson;
+import net.hssco.club.NavigationHelper;
 import net.hssco.club.data.model.Payment;
 import net.hssco.club.data.model.TransactionTypeIntent;
 import net.hssco.club.data.purchase.PurchaseImpl;
@@ -92,7 +93,7 @@ public class AmountActivity extends Activity {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                NavigationHelper.goToWelcome(AmountActivity.this);
             }
         });
 

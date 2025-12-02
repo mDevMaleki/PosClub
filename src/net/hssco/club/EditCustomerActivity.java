@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import net.hssco.club.NavigationHelper;
 
 import org.json.JSONObject;
 
@@ -51,7 +52,7 @@ public class EditCustomerActivity extends Activity {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                NavigationHelper.goToWelcome(EditCustomerActivity.this);
             }
         });
 

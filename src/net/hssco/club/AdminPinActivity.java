@@ -12,6 +12,8 @@ import android.widget.Toast;
 
 import java.security.MessageDigest;
 
+import net.hssco.club.NavigationHelper;
+
 public class AdminPinActivity extends Activity {
 
     private TextView txtPin;
@@ -88,7 +90,7 @@ public class AdminPinActivity extends Activity {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                NavigationHelper.goToWelcome(AdminPinActivity.this);
             }
         });
 

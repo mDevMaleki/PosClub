@@ -8,6 +8,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import net.hssco.club.NavigationHelper;
+
 public class MerchantMenuActivity extends Activity {
 
     private Button btnPrintReceipt;
@@ -88,7 +90,7 @@ public class MerchantMenuActivity extends Activity {
         btnCancelMerchant.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                NavigationHelper.goToWelcome(MerchantMenuActivity.this);
             }
         });
     }
