@@ -3,7 +3,7 @@ package net.hssco.club.sdk.model;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Request DTO for /api/android/psp/balance.
+ * Request DTO for /api/psp/balance.
  */
 public class GetBalanceRequestTransactionCommand {
 

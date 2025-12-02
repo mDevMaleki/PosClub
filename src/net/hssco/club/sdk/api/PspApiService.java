@@ -21,22 +21,22 @@ import retrofit2.http.POST;
 public interface PspApiService {
 
     @Headers("Content-Type: application/json")
-    @POST("/api/android/psp/balance")
+    @POST("/api/psp/balance")
     Call<GetBalanceRequestTransactionResult> getBalance(@Body GetBalanceRequestTransactionCommand request);
 
     @Headers("Content-Type: application/json")
-    @POST("/api/android/psp/sale")
+    @POST("/api/psp/sale")
     Call<PspSaleRequestTransactionResult> sale(@Body PspSaleRequestTransactionCommand request);
 
     @Headers("Content-Type: application/json")
-    @POST("/api/android/psp/sale/verify")
+    @POST("/api/psp/sale/verify")
     Call<PspVerifySaleRequestTransactionResult> verifySale(@Body PspVerifySaleRequestTransactionCommand request);
 
     @Headers("Content-Type: application/json")
-    @POST("/api/android/psp/club/charge")
+    @POST("/api/psp/club/charge")
     Call<LocalRequestClubCardChargeResult> chargeClubCard(@Body LocalRequestClubCardChargeCommand request);
 
     @Headers("Content-Type: application/json")
-    @POST("/api/android/psp/club/charge/verify")
+    @POST("/api/psp/club/charge/verify")
     Call<VerifyLocalRequestClubCardChargResult> verifyCharge(@Body VerifyLocalRequestClubCardChargeCommand request);
 }

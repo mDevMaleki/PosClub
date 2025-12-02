@@ -3,7 +3,7 @@ package net.hssco.club.sdk.model;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Response DTO for /api/android/psp/sale.
+ * Response DTO for /api/psp/sale.
  */
 public class PspSaleRequestTransactionResult {
 

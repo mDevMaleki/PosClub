@@ -3,7 +3,7 @@ package net.hssco.club.sdk.model;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Response DTO for /api/android/psp/club/charge.
+ * Response DTO for /api/psp/club/charge.
  */
 public class LocalRequestClubCardChargeResult {
 
