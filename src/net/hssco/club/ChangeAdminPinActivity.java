@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import net.hssco.club.NavigationHelper;
 
 import java.security.MessageDigest;
 
@@ -67,7 +68,7 @@ public class ChangeAdminPinActivity extends Activity {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                NavigationHelper.goToWelcome(ChangeAdminPinActivity.this);
             }
         });
     }

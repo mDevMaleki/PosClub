@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 // پرینتر
 import android.device.PrinterManager;
+import net.hssco.club.NavigationHelper;
 
 public class AdminMenuActivity extends Activity {
 
@@ -91,7 +92,7 @@ public class AdminMenuActivity extends Activity {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                NavigationHelper.goToWelcome(AdminMenuActivity.this);
             }
         });
 

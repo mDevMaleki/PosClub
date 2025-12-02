@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+import net.hssco.club.NavigationHelper;
 
 public class CustomerPinActivity extends Activity {
 
@@ -74,7 +75,7 @@ public class CustomerPinActivity extends Activity {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                NavigationHelper.goToWelcome(CustomerPinActivity.this);
             }
         });
 
