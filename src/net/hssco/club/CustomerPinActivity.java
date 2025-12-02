@@ -298,11 +298,21 @@ public class CustomerPinActivity extends Activity {
         String addr = prefs.getString(KEY_SERVER_ADDR, "192.168.0.2");
         String port = prefs.getString(KEY_SERVER_PORT, "5212");
 
-        if (addr == null || addr.trim().length() == 0)
-            addr = "192.168.0.2";
+        addr = addr != null ? addr.trim() : "";
+        port = port != null ? port.trim() : "";
 
-        if (port == null || port.trim().length() == 0)
+        if (addr.length() == 0) {
+            addr = "192.168.0.2";
+        }
+
+        if (port.length() == 0) {
             port = "5212";
+        }
+
+        if (addr.startsWith("http://") || addr.startsWith("https://")) {
+            // کاربر آدرس کامل را وارد کرده است
+            return addr.endsWith("/") ? addr.substring(0, addr.length() - 1) : addr;
+        }
 
         return "http://" + addr + ":" + port;
     }

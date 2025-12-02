@@ -62,12 +62,19 @@ public class WelcomeActivity extends Activity {
         String addr = prefs.getString(KEY_SERVER_ADDR, "192.168.0.2");
         String port = prefs.getString(KEY_SERVER_PORT, "5212");
 
+        addr = addr != null ? addr.trim() : "";
+        port = port != null ? port.trim() : "";
+
         // اگر کاربر اشتباهاً پورت را خالی گذاشته بود
-        if (addr == null || addr.trim().length() == 0) {
+        if (addr.length() == 0) {
             addr = "192.168.0.2";
         }
-        if (port == null || port.trim().length() == 0) {
+        if (port.length() == 0) {
             port = "5212";
+        }
+
+        if (addr.startsWith("http://") || addr.startsWith("https://")) {
+            return addr.endsWith("/") ? addr.substring(0, addr.length() - 1) : addr;
         }
 
         return "http://" + addr + ":" + port;
