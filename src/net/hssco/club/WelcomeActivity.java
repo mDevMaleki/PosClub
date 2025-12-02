@@ -77,7 +77,7 @@ public class WelcomeActivity extends Activity {
             return addr.endsWith("/") ? addr.substring(0, addr.length() - 1) : addr;
         }
 
-        return "http://" + addr + ":" + port;
+        return "https://" + addr + ":" + port;
     }
     private Handler uiHandler = new Handler() {
         @Override
