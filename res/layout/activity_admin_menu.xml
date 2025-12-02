@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_main_gradient">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:layoutDirection="rtl"
+        android:textDirection="rtl"
+        android:gravity="top|center_horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- هدر بالا: آیکن تنظیمات + عنوان -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:orientation="horizontal"
+            android:background="@android:color/white"
+            android:gravity="center_vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
+
+            <ImageView
+                android:id="@+id/imgBack"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/backicon"
+                android:contentDescription="@string/app_name" />
+
+
+
+            <TextView
+                android:id="@+id/txtTitleAdmin"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="منوی سرپرست"
+                android:textColor="#CC0000"
+                android:textSize="20sp"
+                android:gravity="center"
+                android:fontFamily="@font/iransansxdemibold" />
+            <ImageView
+                android:id="@+id/imgSettings"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:src="@drawable/settingmenu"
+                android:contentDescription="@string/app_name" />
+
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="24dp" />
+
+        <!-- شناسه پایانه -->
+        <EditText
+            android:id="@+id/edtTerminalId"
+            style="@style/SajedInput"
+            android:hint="شناسه پایانه"
+            android:inputType="number" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="12dp" />
+
+        <!-- شماره سریال دستگاه - فقط نمایش -->
+        <EditText
+            android:id="@+id/edtSerial"
+            style="@style/SajedInput"
+            android:hint="شماره سریال دستگاه"
+            android:enabled="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:cursorVisible="false" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="12dp" />
+
+        <!-- کد لایسنس -->
+        <EditText
+            android:id="@+id/edtLicense"
+            style="@style/SajedInput"
+            android:hint="کد لایسنس"
+            android:inputType="text" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="12dp" />
+
+        <!-- آدرس سرور -->
+        <EditText
+            android:id="@+id/edtServerAddress"
+            style="@style/SajedInput"
+            android:hint="آدرس سرور"
+            android:inputType="textUri" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="12dp" />
+
+        <!-- پورت سرور -->
+        <EditText
+            android:id="@+id/edtServerPort"
+            style="@style/SajedInput"
+            android:hint="پورت سرور"
+            android:inputType="number" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="16dp" />
+
+        <!-- ردیف: خاموش کردن / اتصال وایفا -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/btnPrintSettings"
+                style="@style/SajedButton.Blue"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:text="پرینت تنظیمات" />
+
+            <Space
+                android:layout_width="16dp"
+                android:layout_height="1dp" />
+
+            <Button
+                android:id="@+id/btnWifi"
+                style="@style/SajedButton.Blue"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:text="اتصال به وایفا" />
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="12dp" />
+
+        <!-- تغییر رمز سرپرست -->
+        <Button
+            android:id="@+id/btnChangePin"
+            style="@style/SajedButton.Yellow"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="تغییر رمز سرپرست" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="12dp" />
+
+        <!-- ردیف پایین: لغو / ذخیره -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/btnCancel"
+                style="@style/SajedButton.Red"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:text="لغو" />
+
+            <Space
+                android:layout_width="16dp"
+                android:layout_height="1dp" />
+
+            <Button
+                android:id="@+id/btnSave"
+                style="@style/SajedButton.Green"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:text="ذخیره" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

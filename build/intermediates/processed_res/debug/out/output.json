@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "applicationId": "net.hssco.club",
+  "variantType": "BASE_APK",
+  "elements": [
+    {
+      "outputType": {
+        "type": "PROCESSED_RES"
+      },
+      "apkData": {
+        "type": "MAIN",
+        "splits": [],
+        "versionCode": 30212,
+        "versionName": "3.0.212",
+        "outputFile": "HsscoClubPos-debug.apk",
+        "fullName": "debug",
+        "baseName": "debug",
+        "dirName": ""
+      },
+      "path": "resources-debug.ap_",
+      "properties": {
+        "packageId": "net.hssco.club",
+        "split": "",
+        "minSdkVersion": "21"
+      }
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+#Tue Dec 02 13:24:41 IRST 2025
+base.0=E\:\\POS\\HsscoClubPos\\build\\intermediates\\dex\\debugAndroidTest\\mergeProjectDexDebugAndroidTest\\classes.dex
+renamed.0=classes.dex
+path.0=classes.dex

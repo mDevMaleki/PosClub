@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "artifactType": {
+    "type": "APK",
+    "kind": "Directory"
+  },
+  "applicationId": "net.hssco.club.test",
+  "variantName": "debugAndroidTest",
+  "elements": [
+    {
+      "type": "SINGLE",
+      "filters": [],
+      "properties": [],
+      "versionCode": 30212,
+      "versionName": "3.0.212",
+      "enabled": true,
+      "outputFile": "HsscoClubPos-debug-androidTest.apk"
+    }
+  ]
+}

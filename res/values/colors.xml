@@ -1,0 +1,11 @@
+<resources>
+    <color name="sajed_primary">#F10000</color>
+    <color name="sajed_primary_dark">#9F0000</color>
+
+    <color name="sajed_gold">#E2B23A</color>
+    <color name="sajed_white">#FFFFFF</color>
+    <color name="sajed_light_gray">#F8F8F8</color>
+    <color name="sajed_success">#0EAD69</color>
+    <color name="sajed_error">#D32F2F</color>
+    <color name="sajed_text_dark">#222222</color>
+</resources>

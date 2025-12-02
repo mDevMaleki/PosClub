@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_main_gradient">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:layoutDirection="rtl"
+        android:textDirection="rtl"
+        android:gravity="top|center_horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- نوار بالا -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:orientation="horizontal"
+            android:background="@android:color/white"
+            android:gravity="center_vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
+            <ImageView
+                android:id="@+id/imgBack"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/backicon"
+                android:contentDescription="@string/app_name" />
+
+            <TextView
+                android:id="@+id/txtTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="منوی پذیرنده"
+                android:textColor="#CC0000"
+                android:textSize="20sp"
+                android:gravity="center"
+                android:fontFamily="@font/iransansxdemibold" />
+            <ImageView
+                android:id="@+id/imgShop"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/shopmenu"
+                android:contentDescription="@string/app_name" />
+
+
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="16dp" />
+
+        <!-- کارت سفید اطلاعات آخرین تراکنش -->
+        <LinearLayout
+            android:id="@+id/pnlReceipt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_merchant_panel"
+            android:padding="16dp">
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <!-- هر ردیف: راست عنوان، چپ مقدار -->
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/txtMerchantName"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="سالن کنعانی"
+                        android:textColor="@android:color/black"
+                        android:textSize="18sp"
+                        android:fontFamily="@font/iransansxdemibold" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="نام پذیرنده"
+                        android:gravity="left"
+                        android:textColor="@android:color/black"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/iransansxdemibold" />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:id="@+id/txtTranType"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="خرید"
+                        android:textColor="@android:color/black"
+                        android:textSize="18sp"
+                        android:fontFamily="@font/iransansxdemibold" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="نوع تراکنش"
+                        android:textColor="@android:color/black"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/iransansxdemibold" />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:id="@+id/txtTime"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="14:18"
+                        android:textColor="@android:color/black"
+                        android:textSize="18sp"
+                        android:fontFamily="@font/iransansxdemibold" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="زمان"
+                        android:textColor="@android:color/black"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/iransansxdemibold" />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:id="@+id/txtTerminalCode"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="14040902"
+                        android:textColor="@android:color/black"
+                        android:textSize="18sp"
+                        android:fontFamily="@font/iransansxdemibold" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="کد کارتخوان"
+                        android:textColor="@android:color/black"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/iransansxdemibold" />
+                </TableRow>
+
+                <!-- بقیه ردیف‌ها مثل تصویر: پایانه، پذیرنده، مرجع، شماره پیگیری، شماره کارت، شماره امداد مشتریان -->
+                <!-- برای کوتاه شدن، فقط ساختار را گذاشتم؛ خودت می‌تونی تکثیر کنی -->
+            </TableLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="12dp" />
+
+            <Button
+                android:id="@+id/btnPrintReceipt"
+                style="@style/SajedButton.Green"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="پرینت رسید" />
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="16dp" />
+
+        <!-- ردیف: گزارش تراکنش ها / نمایش تراکنش آخر -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/btnLastTransaction"
+                style="@style/SajedButton.Green"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:text="نمایش تراکنش آخر" />
+
+            <Space
+                android:layout_width="16dp"
+                android:layout_height="1dp" />
+
+            <Button
+                android:id="@+id/btnTransactionsReport"
+                style="@style/SajedButton.Blue"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:text="گزارش تراکنش ها" />
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="12dp" />
+
+        <!-- دکمه تغییر رمز -->
+        <Button
+            android:id="@+id/btnChangePinMerchant"
+            style="@style/SajedButton.Yellow"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="تغییر رمز" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="12dp" />
+
+        <!-- ردیف: لغو / ذخیره -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:orientation="horizontal"
+            android:gravity="center">
+            <Button
+                android:id="@+id/btnSaveMerchant"
+                style="@style/SajedButton.Green"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:text="ذخیره" />
+
+
+            <Space
+                android:layout_width="16dp"
+                android:layout_height="1dp" />
+            <Button
+                android:id="@+id/btnCancelMerchant"
+                style="@style/SajedButton.Red"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:text="لغو" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

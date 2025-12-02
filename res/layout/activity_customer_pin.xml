@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/bg_main_gradient"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:id="@+id/root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="top|center_horizontal"
+        android:layoutDirection="rtl"
+        android:textDirection="rtl">
+
+
+        <TextView
+            android:id="@+id/txtTitleTop"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:gravity="center"
+            android:background="@android:color/white"
+            android:text="رمز کارت"
+            android:textColor="#990000"
+            android:textSize="20sp"
+            android:fontFamily="@font/iransansxdemibold" />
+
+
+        <TextView
+            android:id="@+id/txtSubtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text="ورود رمز الزاما توسط مشتری"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:fontFamily="@font/iransansxdemibold" />
+
+        <!-- قفل + کادر رمز -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layoutDirection="rtl"
+            android:textDirection="rtl">
+
+            <TextView
+                android:id="@+id/txtPin"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:background="@android:color/white"
+                android:gravity="center"
+                android:textColor="#333333"
+                android:textSize="22sp"
+                android:fontFamily="@font/iransansxdemibold" />
+            <ImageView
+                android:id="@+id/imgLock"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:src="@drawable/passicon"
+                android:contentDescription="@string/app_name"
+                android:layout_marginEnd="12dp" />
+
+        </LinearLayout>
+
+        <!-- کیبورد عددی -->
+        <GridLayout
+            android:id="@+id/gridKeys"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="32dp"
+            android:layout_weight="1"
+            android:alignmentMode="alignMargins"
+            android:columnCount="3"
+            android:rowCount="4"
+            android:useDefaultMargins="true"
+            >
+            <Button
+                android:id="@+id/btnNum3"
+                style="@style/KeypadButton"
+                android:text="۳" />
+            <Button
+                android:id="@+id/btnNum2"
+                style="@style/KeypadButton"
+                android:text="۲" />
+            <Button
+                android:id="@+id/btnNum1"
+                style="@style/KeypadButton"
+                android:text="۱" />
+
+            <Button
+                android:id="@+id/btnNum6"
+                style="@style/KeypadButton"
+                android:text="۶" />
+
+            <Button
+                android:id="@+id/btnNum5"
+                style="@style/KeypadButton"
+                android:text="۵" />
+
+            <Button
+                android:id="@+id/btnNum4"
+                style="@style/KeypadButton"
+                android:text="۴" />
+
+
+            <Button
+                android:id="@+id/btnNum9"
+                style="@style/KeypadButton"
+                android:text="۹" />
+            <Button
+                android:id="@+id/btnNum8"
+                style="@style/KeypadButton"
+                android:text="۸" />
+
+            <Button
+                android:id="@+id/btnNum7"
+                style="@style/KeypadButton"
+                android:text="۷" />
+
+
+
+            <ImageButton
+                style="@style/KeypadButton"
+                android:id="@+id/btnBackspace"
+
+                android:src="@drawable/deleteicon"
+                android:contentDescription="@string/app_name"
+                android:padding="20dp"
+                android:scaleType="centerInside"/>
+            <Button
+                android:id="@+id/btnNum0"
+                style="@style/KeypadButton"
+                android:text="۰" />
+
+            <Button
+                android:id="@+id/btnHash"
+                style="@style/KeypadButton"
+                android:text="#" />
+
+
+
+
+        </GridLayout>
+
+        <!-- دکمه‌های پایین -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="8dp">
+
+
+            <Button
+                android:id="@+id/btnOk"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="2"
+                android:text="تایید"
+                style="@style/SajedButton.Green" />
+            <View
+                android:layout_width="16dp"
+                android:layout_height="1dp" />
+            <Button
+                android:id="@+id/btnCancel"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:text="لغو"
+                style="@style/SajedButton.Red" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

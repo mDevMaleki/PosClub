@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_main_gradient">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layoutDirection="rtl"
+        android:textDirection="rtl">
+
+        <ImageView
+            android:id="@+id/imgFooter"
+            android:layout_width="wrap_content"
+            android:layout_height="147px"
+            android:src="@drawable/backfooterwelcome"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/app_name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+
+         <ImageView
+             android:id="@+id/imgLogo"
+             android:layout_width="210px"
+             android:layout_height="280px"
+             android:layout_marginTop="110px"
+             android:src="@drawable/swipecard"
+             android:adjustViewBounds="true"
+             android:contentDescription="@string/app_name"
+             app:layout_constraintStart_toStartOf="parent"
+             app:layout_constraintEnd_toEndOf="parent"
+             app:layout_constraintTop_toTopOf="parent"
+             app:layout_constraintBottom_toBottomOf="parent" />
+
+         <TextView
+             android:id="@+id/txtStatus"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:textColor="#FFFFFF"
+             android:textSize="17pt"
+             android:layout_marginTop="20px"
+             android:fontFamily="@font/iransansxdemibold"
+             android:gravity="center" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_marginTop="115px"
+            android:layoutDirection="rtl"
+            android:textDirection="rtl">
+
+            <ImageView
+                android:id="@+id/imgShopName"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/shopwhiteicon" />
+
+            <TextView
+                android:id="@+id/txtmerchantname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:textColor="#FFFFFF"
+                android:textSize="11pt"
+                android:fontFamily="@font/iransansxdemibold"
+                android:gravity="center" />
+        </LinearLayout>
+         <TextView
+             android:id="@+id/txtmerchantId"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_marginTop="6dp"
+
+             android:textColor="#FFFFFF"
+             android:textSize="7pt"
+             android:fontFamily="@font/iransansxdemibold"
+             android:gravity="center" />
+
+         <TextView
+             android:id="@+id/txtSub2"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_marginTop="4dp"
+             android:text="یکشنبه 1404/09/02"
+             android:textColor="#FFFFFF"
+             android:textSize="7pt"
+             android:fontFamily="@font/iransansxdemibold"
+             android:gravity="center" />
+
+         <TextView
+             android:id="@+id/txtTime"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_marginTop="6dp"
+             android:text="14:14"
+             android:textColor="#FFFFFF"
+             android:textSize="7pt"
+             android:fontFamily="@font/iransansxdemibold"
+             android:gravity="center" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp"
+            android:layoutDirection="rtl">
+
+            <LinearLayout
+                android:id="@+id/btnadminmenu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="@drawable/button_store_bg"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:layout_marginEnd="30dp"
+                android:layoutDirection="rtl">
+
+                <ImageView
+                    android:id="@+id/imgadminmenu"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/settingmenu"/>
+
+                <TextView
+                    android:id="@+id/txtadminmenu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="منو سرپرست"
+                    android:textColor="#000066"
+                    android:textSize="12sp"
+                    android:layout_marginStart="6dp"
+                    android:fontFamily="@font/iransansxdemibold"/>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/btnmerchantmenu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="@drawable/button_store_bg"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:layout_marginStart="30dp"
+                android:layoutDirection="rtl">
+
+                <ImageView
+                    android:id="@+id/imgmerchant"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/shopmenu"/>
+
+                <TextView
+                    android:id="@+id/txtmerchant"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="منو پذیرنده"
+                    android:textColor="#000066"
+                    android:textSize="12sp"
+                    android:layout_marginStart="6dp"
+                    android:fontFamily="@font/iransansxdemibold"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+
+
+    </LinearLayout>
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
