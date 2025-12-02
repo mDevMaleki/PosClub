@@ -43,6 +43,12 @@ android {
         checkReleaseBuilds false
         abortOnError false
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+        coreLibraryDesugaringEnabled true
+    }
 }
 
 
@@ -55,6 +61,8 @@ configurations.all {
 dependencies {
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
 
     implementation 'com.google.code.gson:gson:2.10.1'
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
