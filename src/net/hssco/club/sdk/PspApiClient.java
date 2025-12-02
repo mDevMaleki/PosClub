@@ -3,10 +3,13 @@ package net.hssco.club.sdk;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
 import net.hssco.club.sdk.api.PspApiService;
+import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
+import okhttp3.Protocol;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -46,6 +49,16 @@ public final class PspApiClient {
                 .connectTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
                 .writeTimeout(30, TimeUnit.SECONDS)
+                // Some PSP gateways close the socket immediately after sending the response,
+                // which can manifest as "unexpected end of stream" on keep-alive connections.
+                // Force HTTP/1.1 with a short-lived connection pool and a "Connection: close"
+                // hint to avoid reusing the socket and complete the call successfully.
+                .protocols(Collections.singletonList(Protocol.HTTP_1_1))
+                .connectionPool(new ConnectionPool(0, 1, TimeUnit.SECONDS))
+                .addNetworkInterceptor(chain -> chain.proceed(
+                        chain.request().newBuilder()
+                                .header("Connection", "close")
+                                .build()))
                 .build();
 
         Gson gson = new GsonBuilder()
