@@ -14,6 +14,7 @@ public class SelectOperationActivity extends AppCompatActivity {
     private View btnStatement;
     private View btnEditInfo;
     private View btnIncrease;
+    private View imgBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +26,7 @@ public class SelectOperationActivity extends AppCompatActivity {
         btnStatement = findViewById(R.id.btnStatement);
         btnEditInfo  = findViewById(R.id.btnEditInfo);
         btnIncrease  = findViewById(R.id.btnIncrease);
+        imgBack      = findViewById(R.id.imgHeaderNext);
 
         final String pan = getIntent().getStringExtra("PAN");
 
@@ -78,6 +80,15 @@ public class SelectOperationActivity extends AppCompatActivity {
                 Intent i = new Intent(SelectOperationActivity.this, AmountActivity.class);
                 i.putExtra("mode", "charge");
                 startActivity(i);
+            }
+        });
+
+        imgBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(SelectOperationActivity.this, WelcomeActivity.class);
+                startActivity(i);
+                finish();
             }
         });
     }
