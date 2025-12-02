@@ -49,11 +49,9 @@ public class PspSaleRequestTransactionCommand {
     @SerializedName("DeviceTypeName")
     private String deviceTypeName;
 
-    @SerializedName("SecondPass")
-    private String secondPass;
 
-    @SerializedName("Cvv2")
-    private String cvv2;
+
+
 
     @SerializedName("Description")
     private String description;
@@ -61,13 +59,12 @@ public class PspSaleRequestTransactionCommand {
     @SerializedName("RequestMessage")
     private String requestMessage;
 
-    public PspSaleRequestTransactionCommand() {
-    }
+
 
     public PspSaleRequestTransactionCommand(long requestId, int pspid, String status, String messageType, String tranDate,
                                             String tranTime, long amount, String refrenceNumber, String terminalId,
                                             String stan, String pan, String creditValidation, String pin,
-                                            String deviceTypeName, String secondPass, String cvv2,
+                                            String deviceTypeName,
                                             String description, String requestMessage) {
         this.requestId = requestId;
         this.pspid = pspid;
@@ -83,8 +80,6 @@ public class PspSaleRequestTransactionCommand {
         this.creditValidation = creditValidation;
         this.pin = pin;
         this.deviceTypeName = deviceTypeName;
-        this.secondPass = secondPass;
-        this.cvv2 = cvv2;
         this.description = description;
         this.requestMessage = requestMessage;
     }
@@ -201,21 +196,7 @@ public class PspSaleRequestTransactionCommand {
         this.deviceTypeName = deviceTypeName;
     }
 
-    public String getSecondPass() {
-        return secondPass;
-    }
 
-    public void setSecondPass(String secondPass) {
-        this.secondPass = secondPass;
-    }
-
-    public String getCvv2() {
-        return cvv2;
-    }
-
-    public void setCvv2(String cvv2) {
-        this.cvv2 = cvv2;
-    }
 
     public String getDescription() {
         return description;

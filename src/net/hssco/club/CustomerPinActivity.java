@@ -3,25 +3,36 @@ package net.hssco.club;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
-import net.hssco.club.NavigationHelper;
+
+import com.google.gson.Gson;
+
 import net.hssco.club.sdk.PspApiClient;
 import net.hssco.club.sdk.api.PspApiService;
 import net.hssco.club.sdk.model.GetBalanceRequestTransactionCommand;
 import net.hssco.club.sdk.model.GetBalanceRequestTransactionResult;
+import net.hssco.club.sdk.model.GetBalanceResponse;
 import net.hssco.club.sdk.model.PspSaleRequestTransactionCommand;
 import net.hssco.club.sdk.model.PspSaleRequestTransactionResult;
+import net.hssco.club.sdk.model.PspSaleResponse;
 import net.hssco.club.sdk.model.PspVerifySaleRequestTransactionCommand;
 import net.hssco.club.sdk.model.PspVerifySaleRequestTransactionResult;
+import net.hssco.club.sdk.model.PspVerifySaleResponse;
+
+import java.security.MessageDigest;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class CustomerPinActivity extends Activity {
+
+    private static final String TAG = "CustomerPinActivity";
 
     private TextView txtPin;
     private StringBuilder pinBuilder = new StringBuilder();
@@ -30,7 +41,6 @@ public class CustomerPinActivity extends Activity {
     private String amount;
     private String mode;
 
-    // shared prefs keys
     private static final String PREFS_NAME      = "sajed_prefs";
     private static final String KEY_SERVER_ADDR = "server_addr";
     private static final String KEY_SERVER_PORT = "server_port";
@@ -41,201 +51,205 @@ public class CustomerPinActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_pin);
 
-        txtPin = (TextView) findViewById(R.id.txtPin);
+        txtPin = findViewById(R.id.txtPin);
 
         pan    = getIntent().getStringExtra("pan");
         amount = getIntent().getStringExtra("amount");
         mode   = getIntent().getStringExtra("mode");
 
-        // دکمه‌های عددی
-        int[] numIds = new int[] {
+        Log.d(TAG, "onCreate - pan=" + pan + " mode=" + mode + " amount=" + amount);
+
+        setupNumberButtons();
+        setupBackspaceButton();
+        setupCancelButton();
+        setupOkButton();
+    }
+
+    private void setupNumberButtons() {
+        int[] numIds = new int[]{
                 R.id.btnNum1, R.id.btnNum2, R.id.btnNum3,
                 R.id.btnNum4, R.id.btnNum5, R.id.btnNum6,
                 R.id.btnNum7, R.id.btnNum8, R.id.btnNum9,
                 R.id.btnNum0
         };
 
-        View.OnClickListener numClick = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Button b = (Button) v;
-                if (pinBuilder.length() >= 6) return;
-                pinBuilder.append(b.getText().toString());
-                updatePinView();
-            }
+        View.OnClickListener numClick = v -> {
+            Button b = (Button) v;
+            if (pinBuilder.length() >= 6) return;
+            pinBuilder.append(b.getText().toString());
+            updatePinView();
         };
 
-        for (int i = 0; i < numIds.length; i++) {
-            Button b = (Button) findViewById(numIds[i]);
-            b.setOnClickListener(numClick);
-        }
+        for (int id : numIds) findViewById(id).setOnClickListener(numClick);
+    }
 
-        // بک‌اسپیس
-        ImageButton btnBackspace = (ImageButton) findViewById(R.id.btnBackspace);
-        btnBackspace.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (pinBuilder.length() > 0) {
-                    pinBuilder.deleteCharAt(pinBuilder.length() - 1);
-                    updatePinView();
-                }
+    private void setupBackspaceButton() {
+        ImageButton btnBackspace = findViewById(R.id.btnBackspace);
+        btnBackspace.setOnClickListener(v -> {
+            if (pinBuilder.length() > 0) {
+                pinBuilder.deleteCharAt(pinBuilder.length() - 1);
+                updatePinView();
             }
         });
+    }
 
-        // لغو
-        Button btnCancel = (Button) findViewById(R.id.btnCancel);
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NavigationHelper.goToWelcome(CustomerPinActivity.this);
+    private void setupCancelButton() {
+        Button btnCancel = findViewById(R.id.btnCancel);
+        btnCancel.setOnClickListener(v -> NavigationHelper.goToWelcome(CustomerPinActivity.this));
+    }
+
+    private void setupOkButton() {
+        Button btnOk = findViewById(R.id.btnOk);
+        btnOk.setOnClickListener(v -> {
+            String pin = pinBuilder.toString();
+            if (pin.isEmpty()) {
+                Toast.makeText(this, "رمز مشتری را وارد کنید", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if ("balance".equals(mode)) {
+                requestBalance(pin);
+            } else {
+                requestSale(pin);
             }
         });
-
-        // تایید
-        Button btnOk = (Button) findViewById(R.id.btnOk);
-        btnOk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                String pin = pinBuilder.toString();
-
-                if (pin.length() == 0) {
-                    Toast.makeText(CustomerPinActivity.this,
-                            "رمز مشتری را وارد کنید",
-                            Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                if ("balance".equals(mode)) {
-                    requestBalance(pin);
-                } else {
-                    requestSale(pin);
-                }
-            }
-        });
-
-
     }
 
     private void updatePinView() {
         StringBuilder stars = new StringBuilder();
-        int len = pinBuilder.length();
-        for (int i = 0; i < len; i++) {
-            stars.append("•");
-        }
+        for (int i = 0; i < pinBuilder.length(); i++) stars.append("•");
         txtPin.setText(stars.toString());
     }
 
-    private void requestBalance(String pin) {
-
-        PspApiService service = createApiService();
-
-        if (service == null) {
-            Toast.makeText(this, "آدرس سرور نامعتبر است", Toast.LENGTH_SHORT).show();
-            return;
+    private String sha1(String input) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-1");
+            md.update(input.getBytes("US-ASCII"));
+            byte[] digest = md.digest();
+            StringBuilder sb = new StringBuilder();
+            for (byte b : digest) sb.append(String.format("%02X", b));
+            return sb.toString();
+        } catch (Exception ex) {
+            return null;
         }
+    }
+
+    private String normalizeDigits(String input) {
+        if (input == null) return null;
+        return input.replace("۰","0").replace("۱","1").replace("۲","2")
+                .replace("۳","3").replace("۴","4").replace("۵","5")
+                .replace("۶","6").replace("۷","7").replace("۸","8")
+                .replace("۹","9");
+    }
+
+    // ================== PSP API Calls ==================
+
+    private void requestBalance(String pin) {
+        PspApiService service = createApiService();
+        if (service == null) { showError("آدرس سرور نامعتبر است"); return; }
+
+        String normalizedPin = normalizeDigits(pin);
 
         GetBalanceRequestTransactionCommand command = new GetBalanceRequestTransactionCommand(
                 System.currentTimeMillis(),
                 100,
                 "INIT",
-                "Balance",
+                "0920",
                 getTodayDate(),
                 getCurrentTime(),
                 getTerminalId(),
                 generateStan(),
-                pan,
-                pin,
+                sha1(pan),
+                sha1(normalizedPin),
                 "POS balance request"
         );
 
-        service.getBalance(command).enqueue(new Callback<GetBalanceRequestTransactionResult>() {
+        service.getBalance(command).enqueue(new Callback<GetBalanceResponse>() {
             @Override
-            public void onResponse(Call<GetBalanceRequestTransactionResult> call,
-                                   Response<GetBalanceRequestTransactionResult> response) {
-
-                if (response.isSuccessful() && response.body() != null) {
-                    GetBalanceRequestTransactionResult result = response.body();
-                    openResultScreen(
-                            true,
-                            "balance",
-                            String.valueOf(result.getAmount()),
-                            result.getSpOutputMessage(),
-                            null
-                    );
-                } else {
-                    openResultScreen(false, "balance", null,
-                            "عدم دریافت پاسخ معتبر", null);
+            public void onResponse(Call<GetBalanceResponse> call, Response<GetBalanceResponse> response) {
+                if (!response.isSuccessful() || response.body() == null || response.body().getData() == null) {
+                    openResultScreen(false,"balance",null,"خطای شبکه یا پاسخ نامعتبر",null);
+                    return;
                 }
+
+                GetBalanceRequestTransactionResult result = response.body().getData();
+                String status = result.getResponsStatus() != null ? result.getResponsStatus().trim() : "unknown";
+                boolean success = "0000".equals(status);
+                String message = getPersianMessageForStatus(status);
+
+                openResultScreen(success,"balance",String.valueOf(result.getAmount()),message,new Gson().toJson(result));
             }
 
             @Override
-            public void onFailure(Call<GetBalanceRequestTransactionResult> call, Throwable t) {
-                openResultScreen(false, "balance", null, t.getMessage(), null);
+            public void onFailure(Call<GetBalanceResponse> call, Throwable t) {
+                openResultScreen(false,"balance",null,"عدم اتصال به سرور: "+t.getMessage(),null);
             }
         });
     }
 
     private void requestSale(final String pin) {
-
         PspApiService service = createApiService();
-
-        if (service == null) {
-            Toast.makeText(this, "آدرس سرور نامعتبر است", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        if (service == null) { showError("آدرس سرور نامعتبر است"); return; }
 
         final String stan = generateStan();
         final long amountValue = parseAmount(amount);
+        String pinToSend = sha1(normalizeDigits(pin));
 
         PspSaleRequestTransactionCommand command = new PspSaleRequestTransactionCommand(
                 System.currentTimeMillis(),
                 100,
                 "INIT",
-                "Sale",
+                "0860",
                 getTodayDate(),
                 getCurrentTime(),
                 amountValue,
-                "REF" + stan,
+                "REF"+stan,
                 getTerminalId(),
                 stan,
-                pan,
+                sha1(pan),
                 "VALID",
-                pin,
+                pinToSend,
                 "ANDROID",
-                "0000",
-                "123",
                 "POS sale",
                 "sale request"
         );
 
-        service.sale(command).enqueue(new Callback<PspSaleRequestTransactionResult>() {
-            @Override
-            public void onResponse(Call<PspSaleRequestTransactionResult> call,
-                                   Response<PspSaleRequestTransactionResult> response) {
+        Log.d(TAG, "Sale request body: pan=" + pan + " amount=" + amountValue + " pin(hash)=" + pinToSend);
 
-                if (response.isSuccessful()) {
-                    verifySale(stan, amountValue, response.body());
+        service.sale(command).enqueue(new Callback<PspSaleResponse>() {
+            @Override
+            public void onResponse(Call<PspSaleResponse> call, Response<PspSaleResponse> response) {
+                if (!response.isSuccessful() || response.body() == null) {
+                    openResultScreen(false,"buy",null,"پاسخ خرید معتبر نیست",null);
+                    return;
+                }
+
+                PspSaleResponse resp = response.body();
+                PspSaleRequestTransactionResult saleResult = resp.getData();
+                if (saleResult == null) {
+                    openResultScreen(false,"buy",String.valueOf(amountValue),"پاسخ خرید خالی است",null);
+                    return;
+                }
+
+                String saleStatus = saleResult.getResponsStatus() != null ? saleResult.getResponsStatus().trim() : "unknown";
+
+                if ("0000".equals(saleStatus)) {
+                    verifySale(stan, amountValue, saleResult);
                 } else {
-                    openResultScreen(false, "buy", null, "پاسخ خرید معتبر نیست", null);
+                    openResultScreen(false,"buy",String.valueOf(amountValue),getPersianMessageForStatus(saleStatus),null);
                 }
             }
 
             @Override
-            public void onFailure(Call<PspSaleRequestTransactionResult> call, Throwable t) {
-                openResultScreen(false, "buy", null, t.getMessage(), null);
+            public void onFailure(Call<PspSaleResponse> call, Throwable t) {
+                openResultScreen(false,"buy",null,"عدم اتصال به سرور: "+t.getMessage(),null);
             }
         });
     }
 
-    private void verifySale(final String stan, final long amountValue,
-                            final PspSaleRequestTransactionResult saleResult) {
-
+    private void verifySale(final String stan, final long amountValue, final PspSaleRequestTransactionResult saleResult) {
         PspApiService service = createApiService();
-        if (service == null) {
-            openResultScreen(false, "buy", null, "آدرس سرور نامعتبر است", null);
-            return;
-        }
+        if (service == null) { openResultScreen(false,"buy",null,"آدرس سرور نامعتبر است",null); return; }
 
         PspVerifySaleRequestTransactionCommand verifyCommand = new PspVerifySaleRequestTransactionCommand(
                 System.currentTimeMillis(),
@@ -244,28 +258,34 @@ public class CustomerPinActivity extends Activity {
                 stan
         );
 
-        service.verifySale(verifyCommand).enqueue(new Callback<PspVerifySaleRequestTransactionResult>() {
+        service.verifySale(verifyCommand).enqueue(new Callback<PspVerifySaleResponse>() {
             @Override
-            public void onResponse(Call<PspVerifySaleRequestTransactionResult> call,
-                                   Response<PspVerifySaleRequestTransactionResult> response) {
+            public void onResponse(Call<PspVerifySaleResponse> call, Response<PspVerifySaleResponse> response) {
+                if (!response.isSuccessful() || response.body() == null) {
+                    openResultScreen(false,"buy",String.valueOf(amountValue),"پاسخ تایید نامعتبر است",null);
+                    return;
+                }
 
-                boolean ok = response.isSuccessful();
-                String message = saleResult != null ? saleResult.getSpOutputMessage() : null;
-                String tracking = saleResult != null ? saleResult.getVerifyCode() : null;
+                PspVerifySaleResponse resp = response.body();
+                PspVerifySaleRequestTransactionResult verifyBody = resp.getData();
+                if (verifyBody == null) {
+                    openResultScreen(false,"buy",String.valueOf(amountValue),"پاسخ تایید خالی است",null);
+                    return;
+                }
 
-                openResultScreen(ok, "buy", String.valueOf(amountValue), message, tracking);
+                String verifyStatus = verifyBody.getResponsStatus() != null ? verifyBody.getResponsStatus().trim() : "unknown";
+                boolean success = "0000".equals(verifyStatus);
+                openResultScreen(success,"buy",String.valueOf(amountValue),getPersianMessageForStatus(verifyStatus),null);
             }
 
             @Override
-            public void onFailure(Call<PspVerifySaleRequestTransactionResult> call, Throwable t) {
-                openResultScreen(false, "buy", null, t.getMessage(), null);
+            public void onFailure(Call<PspVerifySaleResponse> call, Throwable t) {
+                openResultScreen(false,"buy",String.valueOf(amountValue),"عدم اتصال به سرور تایید: "+t.getMessage(),null);
             }
         });
     }
 
-    private void openResultScreen(boolean success, String type, String amountValue,
-                                  String message, String tracking) {
-
+    private void openResultScreen(boolean success, String type, String amountValue, String message, String tracking) {
         Intent i = new Intent(CustomerPinActivity.this, PaymentResultActivity.class);
         i.putExtra("status", success ? "success" : "fail");
         i.putExtra("type", type);
@@ -281,9 +301,7 @@ public class CustomerPinActivity extends Activity {
     private PspApiService createApiService() {
         try {
             String base = getBaseUrl();
-            if (!base.endsWith("/")) {
-                base = base + "/";
-            }
+            if (!base.endsWith("/")) base = base + "/";
             return PspApiClient.create(base).getApiService();
         } catch (Exception e) {
             return null;
@@ -291,36 +309,19 @@ public class CustomerPinActivity extends Activity {
     }
 
     private String getBaseUrl() {
-
-        android.content.SharedPreferences prefs =
-                getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-
+        android.content.SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         String addr = prefs.getString(KEY_SERVER_ADDR, "192.168.0.2");
         String port = prefs.getString(KEY_SERVER_PORT, "5212");
-
         addr = addr != null ? addr.trim() : "";
         port = port != null ? port.trim() : "";
-
-        if (addr.length() == 0) {
-            addr = "192.168.0.2";
-        }
-
-        if (port.length() == 0) {
-            port = "5212";
-        }
-
-        if (addr.startsWith("http://") || addr.startsWith("https://")) {
-            // کاربر آدرس کامل را وارد کرده است
-            return addr.endsWith("/") ? addr.substring(0, addr.length() - 1) : addr;
-        }
-
-        return "https://" + addr + ":" + port;
+        if (addr.isEmpty()) addr = "192.168.0.2";
+        if (port.isEmpty()) port = "5212";
+        if (addr.startsWith("http://") || addr.startsWith("https://")) return addr;
+        return "http://" + addr + ":" + port;
     }
 
     private String getTerminalId() {
-        android.content.SharedPreferences prefs =
-                getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-
+        android.content.SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         return prefs.getString(KEY_TERMINAL_ID, "TERM001");
     }
 
@@ -342,22 +343,28 @@ public class CustomerPinActivity extends Activity {
     private long parseAmount(String amountString) {
         try {
             if (amountString == null) return 0L;
-            String clean = amountString
-                    .replaceAll(",", "")
-                    .replace("۰", "0")
-                    .replace("۱", "1")
-                    .replace("۲", "2")
-                    .replace("۳", "3")
-                    .replace("۴", "4")
-                    .replace("۵", "5")
-                    .replace("۶", "6")
-                    .replace("۷", "7")
-                    .replace("۸", "8")
-                    .replace("۹", "9");
+            String clean = normalizeDigits(amountString.replaceAll(",", ""));
             return Long.parseLong(clean);
         } catch (Exception e) {
             return 0L;
         }
     }
 
+    private void showError(final String message) {
+        runOnUiThread(() -> Toast.makeText(CustomerPinActivity.this,message,Toast.LENGTH_LONG).show());
+    }
+
+    private String getPersianMessageForStatus(String status) {
+        if (status == null) return "خطای نامعلوم";
+        switch (status.trim()) {
+            case "0000": return "عملیات موفق";
+            case "0001": return "ترمینال نامعتبر یا غیرفعال است";
+            case "0002": return "شعبه نامعتبر یا غیرفعال است";
+            case "0003": return "کارت یا صاحب کارت نامعتبر است";
+            case "0004": return "کارت غیرفعال یا منقضی شده";
+            case "0007": return "رمز کارت اشتباه است";
+            case "0011": return "موجودی کافی نیست";
+            default:     return "خطای ناشناخته ("+status+")";
+        }
+    }
 }

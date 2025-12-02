@@ -2,12 +2,15 @@ package net.hssco.club.sdk.api;
 
 import net.hssco.club.sdk.model.GetBalanceRequestTransactionCommand;
 import net.hssco.club.sdk.model.GetBalanceRequestTransactionResult;
+import net.hssco.club.sdk.model.GetBalanceResponse;
 import net.hssco.club.sdk.model.LocalRequestClubCardChargeCommand;
 import net.hssco.club.sdk.model.LocalRequestClubCardChargeResult;
 import net.hssco.club.sdk.model.PspSaleRequestTransactionCommand;
 import net.hssco.club.sdk.model.PspSaleRequestTransactionResult;
+import net.hssco.club.sdk.model.PspSaleResponse;
 import net.hssco.club.sdk.model.PspVerifySaleRequestTransactionCommand;
 import net.hssco.club.sdk.model.PspVerifySaleRequestTransactionResult;
+import net.hssco.club.sdk.model.PspVerifySaleResponse;
 import net.hssco.club.sdk.model.VerifyLocalRequestClubCardChargeCommand;
 import net.hssco.club.sdk.model.VerifyLocalRequestClubCardChargResult;
 import retrofit2.Call;
@@ -22,15 +25,15 @@ public interface PspApiService {
 
     @Headers("Content-Type: application/json")
     @POST("/api/psp/balance")
-    Call<GetBalanceRequestTransactionResult> getBalance(@Body GetBalanceRequestTransactionCommand request);
+    Call<GetBalanceResponse> getBalance(@Body GetBalanceRequestTransactionCommand command);
 
     @Headers("Content-Type: application/json")
     @POST("/api/psp/sale")
-    Call<PspSaleRequestTransactionResult> sale(@Body PspSaleRequestTransactionCommand request);
+    Call<PspSaleResponse> sale(@Body PspSaleRequestTransactionCommand command);
 
     @Headers("Content-Type: application/json")
     @POST("/api/psp/sale/verify")
-    Call<PspVerifySaleRequestTransactionResult> verifySale(@Body PspVerifySaleRequestTransactionCommand request);
+    Call<PspVerifySaleResponse> verifySale(@Body PspVerifySaleRequestTransactionCommand request);
 
     @Headers("Content-Type: application/json")
     @POST("/api/psp/club/charge")

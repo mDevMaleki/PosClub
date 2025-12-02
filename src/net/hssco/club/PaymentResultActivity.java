@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,7 +28,9 @@ public class PaymentResultActivity extends Activity {
             txtTracking, txtTerminal, txtMerchant, txtCard, txtSupport;
 
     private ImageView imgStatus;
-    private LinearLayout boxBackground;
+
+    private ImageView imgLogo;
+    private RelativeLayout boxBackground;
 
     private PrinterManager printerManager;
 
@@ -71,7 +74,8 @@ public class PaymentResultActivity extends Activity {
         txtSupport   = (TextView) findViewById(R.id.txtSupport);
 
         imgStatus    = (ImageView) findViewById(R.id.imgStatus);
-        boxBackground = (LinearLayout) findViewById(R.id.boxBackground);
+        imgLogo    = (ImageView) findViewById(R.id.imgLogo);
+        boxBackground = (RelativeLayout) findViewById(R.id.relBackground);
     }
 
     private void setupPrinter() {
@@ -190,7 +194,8 @@ public class PaymentResultActivity extends Activity {
             }
 
             imgStatus.setImageResource(R.drawable.recsuccess);
-            boxBackground.setBackgroundResource(R.drawable.reslogo);
+            imgLogo.setImageResource(R.drawable.reslogo);
+            boxBackground.setBackgroundResource(R.drawable.bg_green_gradient);
 
         } else {
 
@@ -201,8 +206,14 @@ public class PaymentResultActivity extends Activity {
                 txtSubTitle.setText("رمز وارد شده صحیح نمی‌باشد");
             }
 
-            imgStatus.setImageResource(R.drawable.reslogofail);
-            boxBackground.setBackgroundResource(R.drawable.resfail);
+            imgStatus.setImageResource(R.drawable.resfail);
+            imgLogo.setImageResource(R.drawable.reslogofail);
+            // اگر میخوای drawable رو اعمال کنی
+            boxBackground.setBackgroundResource(R.drawable.bg_main_gradient);
+
+
+
+
         }
     }
 

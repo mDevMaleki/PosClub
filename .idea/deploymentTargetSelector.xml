@@ -2,7 +2,7 @@
 <project version="4">
   <component name="deploymentTargetSelector">
     <selectionStates>
-      <SelectionState runConfigName="HsscoClubPos">
+      <SelectionState runConfigName="PosClub">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>
