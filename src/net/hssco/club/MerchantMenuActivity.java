@@ -15,6 +15,7 @@ public class MerchantMenuActivity extends Activity {
     private Button btnPrintReceipt;
     private Button btnLastTransaction;
     private Button btnTransactionsReport;
+    private Button btnTemplateBuilder;
     private Button btnChangePinMerchant;
     private Button btnSaveMerchant;
     private Button btnCancelMerchant;
@@ -27,6 +28,7 @@ public class MerchantMenuActivity extends Activity {
         btnPrintReceipt = (Button) findViewById(R.id.btnPrintReceipt);
         btnLastTransaction = (Button) findViewById(R.id.btnLastTransaction);
         btnTransactionsReport = (Button) findViewById(R.id.btnTransactionsReport);
+        btnTemplateBuilder = (Button) findViewById(R.id.btnTemplateBuilder);
         btnChangePinMerchant = (Button) findViewById(R.id.btnChangePinMerchant);
         btnSaveMerchant = (Button) findViewById(R.id.btnSaveMerchant);
         btnCancelMerchant = (Button) findViewById(R.id.btnCancelMerchant);
@@ -65,6 +67,14 @@ public class MerchantMenuActivity extends Activity {
                 Toast.makeText(MerchantMenuActivity.this,
                         "گزارش تراکنش‌ها",
                         Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        btnTemplateBuilder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MerchantMenuActivity.this, TemplateBuilderActivity.class);
+                startActivity(i);
             }
         });
 
