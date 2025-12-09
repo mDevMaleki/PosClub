@@ -26,12 +26,6 @@ android {
         release.setRoot('build-types/release')
     }
 
-    repositories {
-        flatDir {
-            dirs 'libs'
-        }
-    }
-
     buildTypes {
         release {
             minifyEnabled false
@@ -51,17 +45,19 @@ android {
     }
 }
 
-
 configurations.all {
     exclude group: "androidx.profileinstaller"
     exclude group: "androidx.startup"
 }
 
+repositories {
+    google()
+    mavenCentral()
+    maven { url 'https://jitpack.io' } // <--- حتما اضافه شود
+}
 
 dependencies {
-
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
 
     implementation 'com.google.code.gson:gson:2.10.1'
