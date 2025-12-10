@@ -310,11 +310,11 @@ public class CustomerPinActivity extends Activity {
 
     private String getBaseUrl() {
         android.content.SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        String addr = prefs.getString(KEY_SERVER_ADDR, "192.168.0.2");
+        String addr = prefs.getString(KEY_SERVER_ADDR, "192.168.1.110");
         String port = prefs.getString(KEY_SERVER_PORT, "5212");
         addr = addr != null ? addr.trim() : "";
         port = port != null ? port.trim() : "";
-        if (addr.isEmpty()) addr = "192.168.0.2";
+        if (addr.isEmpty()) addr = "192.168.1.110";
         if (port.isEmpty()) port = "5212";
         if (addr.startsWith("http://") || addr.startsWith("https://")) return addr;
         return "http://" + addr + ":" + port;

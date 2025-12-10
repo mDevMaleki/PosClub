@@ -294,34 +294,35 @@
             </LinearLayout>
 
         </LinearLayout>
+        <LinearLayout
+            android:layout_below="@id/boxBackground"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/btnPrint"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:text="پرینت رسید مشتری"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:background="@drawable/bg_btn_green" />
+
+            <Button
+                android:id="@+id/btnBack"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:text="بازگشت"
+                android:textSize="18sp"
+                android:textColor="#008F43"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_btn_red" />
+        </LinearLayout>
     </LinearLayout>
 
     <!-- دکمه‌ها -->
-    <LinearLayout
-        android:layout_below="@id/boxBackground"
-        android:layout_marginTop="20dp"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
-        <Button
-            android:id="@+id/btnPrint"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:text="پرینت رسید مشتری"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            android:background="@drawable/bg_btn_blue" />
-
-        <Button
-            android:id="@+id/btnBack"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:text="بازگشت"
-            android:textSize="18sp"
-            android:textColor="#008F43"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/bg_btn_white" />
-    </LinearLayout>
 
 </RelativeLayout>

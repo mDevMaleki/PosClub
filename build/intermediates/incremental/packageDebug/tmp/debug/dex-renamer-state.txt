@@ -1,4 +1,4 @@
-#Tue Dec 09 20:02:28 IRST 2025
+#Wed Dec 10 15:30:17 IRST 2025
 base.1=C\:\\Users\\SAJED\\AndroidStudioProjects\\PosClub\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\classes.dex
 path.1=classes.dex
 base.0=C\:\\Users\\SAJED\\AndroidStudioProjects\\PosClub\\build\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes.dex
