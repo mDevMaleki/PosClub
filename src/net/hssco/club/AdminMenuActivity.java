@@ -1,6 +1,5 @@
 package net.hssco.club;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,7 +18,7 @@ import android.widget.Toast;
 import android.device.PrinterManager;
 import net.hssco.club.NavigationHelper;
 
-public class AdminMenuActivity extends Activity {
+public class AdminMenuActivity extends BaseActivity {
 
     private EditText edtTerminalId;
     private EditText edtSerial;

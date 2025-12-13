@@ -1,5 +1,6 @@
 package net.hssco.club;
 
+import android.app.AlertDialog;
 import android.app.Activity;
 import android.content.Intent;
 
@@ -372,6 +373,19 @@ public class WelcomeActivity extends Activity {
         super.onPause();
         if (magThread != null) magThread.stopThread();
         if (magManager != null) magManager.close();
+    }
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setTitle("خروج")
+                .setMessage("آیا برای خروج از برنامه مطمئن هستید؟")
+                .setPositiveButton("بله", (dialog, which) -> {
+                    dialog.dismiss();
+                    finishAffinity();
+                })
+                .setNegativeButton("خیر", (dialog, which) -> dialog.dismiss())
+                .show();
     }
 
     @Override

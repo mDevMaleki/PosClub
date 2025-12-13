@@ -1,6 +1,5 @@
 package net.hssco.club;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -23,7 +22,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AmountActivity extends Activity {
+public class AmountActivity extends BaseActivity {
 
     private TextView amountInput;
     private String pan; // PAN برای تراکنش‌ها
