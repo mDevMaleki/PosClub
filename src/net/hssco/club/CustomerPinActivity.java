@@ -367,4 +367,9 @@ public class CustomerPinActivity extends Activity {
             default:     return "خطای ناشناخته ("+status+")";
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        NavigationHelper.goToWelcome(this);
+    }
 }

@@ -9,6 +9,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import net.hssco.club.NavigationHelper;
 import net.hssco.club.data.model.Payment;
 import net.hssco.club.data.model.TransactionTypeIntent;
 import net.hssco.club.data.purchase.PurchaseImpl;
@@ -87,7 +88,7 @@ public class AmountActivity extends Activity {
 
     private void setupCancelButton() {
         Button btnCancel = findViewById(R.id.btnCancel);
-        btnCancel.setOnClickListener(v -> finish());
+        btnCancel.setOnClickListener(v -> NavigationHelper.goToWelcome(AmountActivity.this));
     }
 
     private void onNextClicked() {
@@ -278,6 +279,11 @@ public class AmountActivity extends Activity {
                 .replace("3", "۳").replace("4", "۴").replace("5", "۵")
                 .replace("6", "۶").replace("7", "۷").replace("8", "۸")
                 .replace("9", "۹");
+    }
+
+    @Override
+    public void onBackPressed() {
+        NavigationHelper.goToWelcome(this);
     }
 
     public static String numberToPersianWords(long number) {
