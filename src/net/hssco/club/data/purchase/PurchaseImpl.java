@@ -39,6 +39,11 @@ public final class PurchaseImpl implements Purchase {
         }
     }
 
+    public Intent createEmptyIntent() {
+        Intent intent = new Intent();
+        intent.setComponent(new ComponentName(PACKAGE_NAME, TARGET_ACTIVITY));
+        return intent;
+    }
     @Override
     public Intent createIntent(Payment paymentData) {
         String data = gson.toJson(paymentData);

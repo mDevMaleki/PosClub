@@ -26,20 +26,20 @@
             app:layout_constraintBottom_toBottomOf="parent" />
 
 
-         <ImageView
-             android:id="@+id/imgLogo"
-             android:layout_width="210px"
-             android:layout_height="280px"
-             android:layout_marginTop="110px"
-             android:src="@drawable/swipecard"
-             android:adjustViewBounds="true"
-             android:contentDescription="@string/app_name"
-             app:layout_constraintStart_toStartOf="parent"
-             app:layout_constraintEnd_toEndOf="parent"
-             app:layout_constraintTop_toTopOf="parent"
-             app:layout_constraintBottom_toBottomOf="parent" />
+        <ImageView
+            android:id="@+id/imgLogo"
+            android:layout_width="210px"
+            android:layout_height="280px"
+            android:layout_marginTop="50px"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/swipecard"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-         <TextView
+        <TextView
              android:id="@+id/txtStatus"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
@@ -157,8 +157,7 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:background="@drawable/button_store_bg"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
+
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
                 android:layout_marginStart="30dp"

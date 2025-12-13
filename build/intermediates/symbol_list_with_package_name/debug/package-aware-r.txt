@@ -1822,6 +1822,7 @@ id boxBackground
 id btnBack
 id btnBackspace
 id btnBalance
+id btnBankPayment
 id btnBuy
 id btnCancel
 id btnCancelMerchant
@@ -2212,15 +2213,12 @@ id txtCard
 id txtClub
 id txtCurrency
 id txtDate
-id txtDetail
 id txtEditInfo
 id txtHint
 id txtIncrease
 id txtMerchant
 id txtMerchantName
-id txtMessage
 id txtPin
-id txtPinStatus
 id txtStatement
 id txtStatus
 id txtSub2
@@ -2320,8 +2318,6 @@ layout activity_customer_pin
 layout activity_edit_customer
 layout activity_merchant_menu
 layout activity_payment_result
-layout activity_pin
-layout activity_result
 layout activity_select_operation
 layout activity_splash
 layout activity_welcome

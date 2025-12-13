@@ -276,16 +276,13 @@ public class WelcomeActivity extends Activity {
 
     private void openBankPayment() {
         try {
-            Payment payment = new Payment();
-            payment.setApplicationId("1");
-            payment.setTransactionType(TransactionTypeIntent.PURCHASE);
-
-            Intent intent = PurchaseImpl.getInstance().createIntent(payment);
+            Intent intent = PurchaseImpl.getInstance().createEmptyIntent();
             startActivityForResult(intent, REQUEST_BANK_PAYMENT);
         } catch (Exception e) {
             Toast.makeText(this, "امکان اجرای پرداخت وجود ندارد", Toast.LENGTH_SHORT).show();
         }
     }
+
 
 
     @Override

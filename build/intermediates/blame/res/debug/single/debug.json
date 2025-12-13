@@ -4,12 +4,12 @@
         "source": "C:\\Users\\SAJED\\AndroidStudioProjects\\PosClub\\res\\drawable\\customericon.png"
     },
     {
-        "merged": "C:\\Users\\SAJED\\AndroidStudioProjects\\PosClub\\build\\intermediates\\res\\merged\\debug\\drawable_backfooterwelcome.png.flat",
-        "source": "C:\\Users\\SAJED\\AndroidStudioProjects\\PosClub\\res\\drawable\\backfooterwelcome.png"
-    },
-    {
         "merged": "C:\\Users\\SAJED\\AndroidStudioProjects\\PosClub\\build\\intermediates\\res\\merged\\debug\\drawable_logo.png.flat",
         "source": "C:\\Users\\SAJED\\AndroidStudioProjects\\PosClub\\res\\drawable\\logo.png"
+    },
+    {
+        "merged": "C:\\Users\\SAJED\\AndroidStudioProjects\\PosClub\\build\\intermediates\\res\\merged\\debug\\drawable_backfooterwelcome.png.flat",
+        "source": "C:\\Users\\SAJED\\AndroidStudioProjects\\PosClub\\res\\drawable\\backfooterwelcome.png"
     },
     {
         "merged": "C:\\Users\\SAJED\\AndroidStudioProjects\\PosClub\\build\\intermediates\\res\\merged\\debug\\drawable_bg_input_admin.xml.flat",
@@ -46,10 +46,6 @@
     {
         "merged": "C:\\Users\\SAJED\\AndroidStudioProjects\\PosClub\\build\\intermediates\\res\\merged\\debug\\drawable_balance.png.flat",
         "source": "C:\\Users\\SAJED\\AndroidStudioProjects\\PosClub\\res\\drawable\\balance.png"
-    },
-    {
-        "merged": "C:\\Users\\SAJED\\AndroidStudioProjects\\PosClub\\build\\intermediates\\res\\merged\\debug\\layout_activity_result.xml.flat",
-        "source": "C:\\Users\\SAJED\\AndroidStudioProjects\\PosClub\\res\\layout\\activity_result.xml"
     },
     {
         "merged": "C:\\Users\\SAJED\\AndroidStudioProjects\\PosClub\\build\\intermediates\\res\\merged\\debug\\drawable_deleteicon.png.flat",
@@ -130,10 +126,6 @@
     {
         "merged": "C:\\Users\\SAJED\\AndroidStudioProjects\\PosClub\\build\\intermediates\\res\\merged\\debug\\drawable_bg_pin_gradient.xml.flat",
         "source": "C:\\Users\\SAJED\\AndroidStudioProjects\\PosClub\\res\\drawable\\bg_pin_gradient.xml"
-    },
-    {
-        "merged": "C:\\Users\\SAJED\\AndroidStudioProjects\\PosClub\\build\\intermediates\\res\\merged\\debug\\layout_activity_pin.xml.flat",
-        "source": "C:\\Users\\SAJED\\AndroidStudioProjects\\PosClub\\res\\layout\\activity_pin.xml"
     },
     {
         "merged": "C:\\Users\\SAJED\\AndroidStudioProjects\\PosClub\\build\\intermediates\\res\\merged\\debug\\drawable_splash_background.xml.flat",
