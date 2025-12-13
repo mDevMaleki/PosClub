@@ -239,8 +239,12 @@ public class AmountActivity extends Activity {
                 String message = getPersianMessageForStatus(verifyStatus);
 
                 // اگر وریفای موفق نبود ولی پاسخ شارژ اولیه داشتیم، پیام اولیه را نمایش بدهیم
-                if (!success && chargeResult != null && chargeResult.getResponsStatus() != null) {
-                    message = getPersianMessageForStatus(chargeResult.getResponsStatus());
+                if (!success && chargeResult != null) {
+                    if (chargeResult.getSpOutputMessage() != null && !chargeResult.getSpOutputMessage().trim().isEmpty()) {
+                        message = chargeResult.getSpOutputMessage();
+                    } else if (chargeResult.getResponsStatus() != null) {
+                        message = getPersianMessageForStatus(chargeResult.getResponsStatus());
+                    }
                 }
 
                 openChargeResult(success, message);
