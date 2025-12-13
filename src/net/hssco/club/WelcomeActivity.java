@@ -25,6 +25,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import net.hssco.club.data.model.Payment;
+import net.hssco.club.data.model.TransactionTypeIntent;
+import net.hssco.club.data.purchase.PurchaseImpl;
+
 public class WelcomeActivity extends Activity {
 
     private static final String PREFS_NAME      = "sajed_prefs";
@@ -40,6 +44,7 @@ public class WelcomeActivity extends Activity {
 
     private static final int MSG_CARD = 1;
     private static final int MSG_STATUS = 2;
+    private static final int REQUEST_BANK_PAYMENT = 2001;
 
     private boolean isWifiConnected() {
         try {
@@ -269,6 +274,19 @@ public class WelcomeActivity extends Activity {
                 .replace("9", "۹");
     }
 
+    private void openBankPayment() {
+        try {
+            Payment payment = new Payment();
+            payment.setApplicationId("1");
+            payment.setTransactionType(TransactionTypeIntent.PURCHASE);
+
+            Intent intent = PurchaseImpl.getInstance().createIntent(payment);
+            startActivityForResult(intent, REQUEST_BANK_PAYMENT);
+        } catch (Exception e) {
+            Toast.makeText(this, "امکان اجرای پرداخت وجود ندارد", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -281,6 +299,7 @@ public class WelcomeActivity extends Activity {
 
         LinearLayout btnmerchantmenu = (LinearLayout) findViewById(R.id.btnmerchantmenu);
         LinearLayout btnadminmenu = (LinearLayout) findViewById(R.id.btnadminmenu);
+        LinearLayout btnBankPayment = findViewById(R.id.btnBankPayment);
         btnadminmenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -299,6 +318,8 @@ public class WelcomeActivity extends Activity {
                 startActivity(i);
             }
         });
+
+        btnBankPayment.setOnClickListener(v -> openBankPayment());
 
 
 
@@ -354,6 +375,21 @@ public class WelcomeActivity extends Activity {
         super.onPause();
         if (magThread != null) magThread.stopThread();
         if (magManager != null) magManager.close();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_BANK_PAYMENT) {
+            Payment payment = PurchaseImpl.getInstance().receiveResult(data);
+
+            if (payment != null && payment.getResult() == 0) {
+                Toast.makeText(this, "پرداخت با موفقیت انجام شد", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "پرداخت ناموفق بود", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     // ---------------- Reader Thread ---------------------
