@@ -5,6 +5,8 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 
+import net.hssco.club.NavigationHelper;
+
 public class SelectOperationActivity extends AppCompatActivity {
 
     private View btnBuy;
@@ -83,10 +85,11 @@ public class SelectOperationActivity extends AppCompatActivity {
         // -----------------------------
         // برگشت
         // -----------------------------
-        imgBack.setOnClickListener(v -> {
-            Intent i = new Intent(SelectOperationActivity.this, WelcomeActivity.class);
-            startActivity(i);
-            finish();
-        });
+        imgBack.setOnClickListener(v -> NavigationHelper.goToWelcome(SelectOperationActivity.this));
+    }
+
+    @Override
+    public void onBackPressed() {
+        NavigationHelper.goToWelcome(this);
     }
 }

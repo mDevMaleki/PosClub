@@ -160,6 +160,11 @@ public class AdminMenuActivity extends Activity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        NavigationHelper.goToWelcome(this);
+    }
+
     // گرفتن سریال دستگاه
     private String getDeviceSerial() {
         String serial = null;
