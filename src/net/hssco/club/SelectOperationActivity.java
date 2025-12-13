@@ -89,4 +89,11 @@ public class SelectOperationActivity extends AppCompatActivity {
             finish();
         });
     }
+
+    @Override
+    public void onBackPressed() {
+        Intent i = new Intent(SelectOperationActivity.this, WelcomeActivity.class);
+        startActivity(i);
+        finish();
+    }
 }
