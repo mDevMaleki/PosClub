@@ -16,10 +16,6 @@ import net.hssco.club.sdk.PspApiClient;
 import net.hssco.club.sdk.api.PspApiService;
 import net.hssco.club.sdk.model.AddBalanceResponse;
 import net.hssco.club.sdk.model.AddBalanceWithPanCommand;
-import net.hssco.club.sdk.model.LocalRequestClubCardChargeCommand;
-import net.hssco.club.sdk.model.LocalRequestClubCardChargeResult;
-import net.hssco.club.sdk.model.VerifyLocalRequestClubCardChargeCommand;
-import net.hssco.club.sdk.model.VerifyLocalRequestClubCardChargResult;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -38,7 +34,6 @@ public class AmountActivity extends Activity {
     private static final String KEY_SERVER_ADDR = "server_addr";
     private static final String KEY_SERVER_PORT = "server_port";
     private static final String KEY_TERMINAL_ID = "terminal_id";
-    private static final String KEY_LICENSE = "license";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,9 +129,10 @@ public class AmountActivity extends Activity {
             Payment payment = PurchaseImpl.getInstance().receiveResult(data);
 
             if (payment != null && payment.getResult() == 0) {
-                // پرداخت موفق → اجرا کردن شارژ و وریفای
+                // پرداخت موفق → ارسال درخواست افزایش موجودی به بک‌اند
                 pan = payment.getCardNumber();
-                requestCharge(payment);
+                chargeAmount = parseAmount(amountBuilder.toString());
+                sendAddBalanceToBackend(payment.getMessage());
 
             } else {
                 // پرداخت ناموفق → مستقیم رفتن به صفحه نتیجه
@@ -164,105 +160,6 @@ public class AmountActivity extends Activity {
             amountInput.setText("");
             txtWords.setText("");
         }
-    }
-
-    // ----------- شارژ کارت -------------
-    private void requestCharge(final Payment payment) {
-        PspApiService service = createApiService();
-        if (service == null) {
-            Toast.makeText(this, "آدرس سرور نامعتبر است", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        final String stan = generateStan();
-        chargeAmount = parseAmount(amountBuilder.toString());
-
-        LocalRequestClubCardChargeCommand command = new LocalRequestClubCardChargeCommand(
-                System.currentTimeMillis(),
-                100,
-                getLicense(),
-                "INIT",
-                "Charge",
-                getTodayDate(),
-                getCurrentTime(),
-                chargeAmount,
-                "REF" + stan,
-                getTerminalId(),
-                stan,
-                pan,
-                "VALID",
-                "0000",
-                "ANDROID",
-                "0000",
-                "123",
-                "Club charge",
-                "charge payload",
-                pan
-        );
-
-        service.chargeClubCard(command).enqueue(new Callback<LocalRequestClubCardChargeResult>() {
-            @Override
-            public void onResponse(Call<LocalRequestClubCardChargeResult> call,
-                                   Response<LocalRequestClubCardChargeResult> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    verifyCharge(stan, response.body());
-                } else {
-                    openChargeResult(false, "پاسخ شارژ معتبر نیست");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<LocalRequestClubCardChargeResult> call, Throwable t) {
-                openChargeResult(false, t.getMessage());
-            }
-        });
-    }
-
-    private void verifyCharge(final String stan, final LocalRequestClubCardChargeResult chargeResult) {
-        PspApiService service = createApiService();
-        if (service == null) {
-            openChargeResult(false, "آدرس سرور نامعتبر است");
-            return;
-        }
-
-        VerifyLocalRequestClubCardChargeCommand verifyCommand = new VerifyLocalRequestClubCardChargeCommand(
-                System.currentTimeMillis(),
-                100,
-                getTerminalId(),
-                stan
-        );
-
-        service.verifyCharge(verifyCommand).enqueue(new Callback<VerifyLocalRequestClubCardChargResult>() {
-            @Override
-            public void onResponse(Call<VerifyLocalRequestClubCardChargResult> call,
-                                   Response<VerifyLocalRequestClubCardChargResult> response) {
-                VerifyLocalRequestClubCardChargResult verifyBody = response.body();
-                String verifyStatus = verifyBody != null ? verifyBody.getResponsStatus() : null;
-
-                boolean success = response.isSuccessful() && "0000".equals(verifyStatus);
-                String message = getPersianMessageForStatus(verifyStatus);
-
-                // اگر وریفای موفق نبود ولی پاسخ شارژ اولیه داشتیم، پیام اولیه را نمایش بدهیم
-                if (!success && chargeResult != null) {
-                    if (chargeResult.getSpOutputMessage() != null && !chargeResult.getSpOutputMessage().trim().isEmpty()) {
-                        message = chargeResult.getSpOutputMessage();
-                    } else if (chargeResult.getResponsStatus() != null) {
-                        message = getPersianMessageForStatus(chargeResult.getResponsStatus());
-                    }
-                }
-
-                if (success) {
-                    sendAddBalanceToBackend(message);
-                } else {
-                    openChargeResult(false, message);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<VerifyLocalRequestClubCardChargResult> call, Throwable t) {
-                openChargeResult(false, t.getMessage());
-            }
-        });
     }
 
     private void sendAddBalanceToBackend(final String fallbackMessage) {
@@ -337,11 +234,6 @@ public class AmountActivity extends Activity {
         return prefs.getString(KEY_TERMINAL_ID, "TERM001");
     }
 
-    private String getLicense() {
-        android.content.SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        return prefs.getString(KEY_LICENSE, "MERCHANT_PIN");
-    }
-
     private String getTodayDate() {
         java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyyMMdd", java.util.Locale.US);
         return sdf.format(new java.util.Date());
@@ -350,11 +242,6 @@ public class AmountActivity extends Activity {
     private String getCurrentTime() {
         java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("HHmmss", java.util.Locale.US);
         return sdf.format(new java.util.Date());
-    }
-
-    private String generateStan() {
-        int value = new java.util.Random().nextInt(900000) + 100000;
-        return String.valueOf(value);
     }
 
     private long parseAmount(String amountString) {
