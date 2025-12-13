@@ -19,6 +19,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 
 /**
  * Retrofit interface for the POS/Club PSP API.
@@ -46,6 +47,6 @@ public interface PspApiService {
     Call<VerifyLocalRequestClubCardChargResult> verifyCharge(@Body VerifyLocalRequestClubCardChargeCommand request);
 
     @Headers("Content-Type: application/json")
-    @POST("/api/psp/club/addBalance")
+    @PUT("/api/psp/addBalance")
     Call<AddBalanceResponse> addBalance(@Body AddBalanceWithPanCommand request);
 }

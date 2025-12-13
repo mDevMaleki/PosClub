@@ -4,12 +4,12 @@
         "source": "C:\\Users\\SAJED\\AndroidStudioProjects\\PosClub\\res\\drawable\\customericon.png"
     },
     {
-        "merged": "C:\\Users\\SAJED\\AndroidStudioProjects\\PosClub\\build\\intermediates\\res\\merged\\debug\\drawable_logo.png.flat",
-        "source": "C:\\Users\\SAJED\\AndroidStudioProjects\\PosClub\\res\\drawable\\logo.png"
-    },
-    {
         "merged": "C:\\Users\\SAJED\\AndroidStudioProjects\\PosClub\\build\\intermediates\\res\\merged\\debug\\drawable_backfooterwelcome.png.flat",
         "source": "C:\\Users\\SAJED\\AndroidStudioProjects\\PosClub\\res\\drawable\\backfooterwelcome.png"
+    },
+    {
+        "merged": "C:\\Users\\SAJED\\AndroidStudioProjects\\PosClub\\build\\intermediates\\res\\merged\\debug\\drawable_logo.png.flat",
+        "source": "C:\\Users\\SAJED\\AndroidStudioProjects\\PosClub\\res\\drawable\\logo.png"
     },
     {
         "merged": "C:\\Users\\SAJED\\AndroidStudioProjects\\PosClub\\build\\intermediates\\res\\merged\\debug\\drawable_bg_input_admin.xml.flat",

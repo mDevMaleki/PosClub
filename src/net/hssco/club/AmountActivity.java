@@ -17,6 +17,8 @@ import net.hssco.club.sdk.api.PspApiService;
 import net.hssco.club.sdk.model.AddBalanceResponse;
 import net.hssco.club.sdk.model.AddBalanceWithPanCommand;
 
+import java.security.MessageDigest;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -130,7 +132,7 @@ public class AmountActivity extends Activity {
 
             if (payment != null && payment.getResult() == 0) {
                 // پرداخت موفق → ارسال درخواست افزایش موجودی به بک‌اند
-                pan = payment.getCardNumber();
+
                 chargeAmount = parseAmount(amountBuilder.toString());
                 sendAddBalanceToBackend(payment.getMessage());
 
@@ -169,7 +171,7 @@ public class AmountActivity extends Activity {
             return;
         }
 
-        AddBalanceWithPanCommand request = new AddBalanceWithPanCommand(pan, chargeAmount);
+        AddBalanceWithPanCommand request = new AddBalanceWithPanCommand(   sha1(pan), chargeAmount);
         service.addBalance(request).enqueue(new Callback<AddBalanceResponse>() {
             @Override
             public void onResponse(Call<AddBalanceResponse> call, Response<AddBalanceResponse> response) {
@@ -193,6 +195,18 @@ public class AmountActivity extends Activity {
         });
     }
 
+    private String sha1(String input) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-1");
+            md.update(input.getBytes("US-ASCII"));
+            byte[] digest = md.digest();
+            StringBuilder sb = new StringBuilder();
+            for (byte b : digest) sb.append(String.format("%02X", b));
+            return sb.toString();
+        } catch (Exception ex) {
+            return null;
+        }
+    }
     private void openChargeResult(boolean success, String message) {
         Intent intent = new Intent(AmountActivity.this, PaymentResultActivity.class);
         intent.putExtra("status", success ? "success" : "fail");
