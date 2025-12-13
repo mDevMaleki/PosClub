@@ -14,6 +14,8 @@ import net.hssco.club.data.model.TransactionTypeIntent;
 import net.hssco.club.data.purchase.PurchaseImpl;
 import net.hssco.club.sdk.PspApiClient;
 import net.hssco.club.sdk.api.PspApiService;
+import net.hssco.club.sdk.model.AddBalanceResponse;
+import net.hssco.club.sdk.model.AddBalanceWithPanCommand;
 import net.hssco.club.sdk.model.LocalRequestClubCardChargeCommand;
 import net.hssco.club.sdk.model.LocalRequestClubCardChargeResult;
 import net.hssco.club.sdk.model.VerifyLocalRequestClubCardChargeCommand;
@@ -29,6 +31,8 @@ public class AmountActivity extends Activity {
     private String pan; // PAN برای تراکنش‌ها
     private final StringBuilder amountBuilder = new StringBuilder();
     private String mode; // "charge" یا "buy"
+
+    private long chargeAmount;
 
     private static final String PREFS_NAME = "sajed_prefs";
     private static final String KEY_SERVER_ADDR = "server_addr";
@@ -171,7 +175,7 @@ public class AmountActivity extends Activity {
         }
 
         final String stan = generateStan();
-        long amountValue = parseAmount(amountBuilder.toString());
+        chargeAmount = parseAmount(amountBuilder.toString());
 
         LocalRequestClubCardChargeCommand command = new LocalRequestClubCardChargeCommand(
                 System.currentTimeMillis(),
@@ -181,7 +185,7 @@ public class AmountActivity extends Activity {
                 "Charge",
                 getTodayDate(),
                 getCurrentTime(),
-                amountValue,
+                chargeAmount,
                 "REF" + stan,
                 getTerminalId(),
                 stan,
@@ -247,11 +251,46 @@ public class AmountActivity extends Activity {
                     }
                 }
 
-                openChargeResult(success, message);
+                if (success) {
+                    sendAddBalanceToBackend(message);
+                } else {
+                    openChargeResult(false, message);
+                }
             }
 
             @Override
             public void onFailure(Call<VerifyLocalRequestClubCardChargResult> call, Throwable t) {
+                openChargeResult(false, t.getMessage());
+            }
+        });
+    }
+
+    private void sendAddBalanceToBackend(final String fallbackMessage) {
+        PspApiService service = createApiService();
+        if (service == null) {
+            openChargeResult(false, "آدرس سرور نامعتبر است");
+            return;
+        }
+
+        AddBalanceWithPanCommand request = new AddBalanceWithPanCommand(pan, chargeAmount);
+        service.addBalance(request).enqueue(new Callback<AddBalanceResponse>() {
+            @Override
+            public void onResponse(Call<AddBalanceResponse> call, Response<AddBalanceResponse> response) {
+                AddBalanceResponse body = response.body();
+                if (response.isSuccessful() && body != null) {
+                    boolean success = body.isSuccess();
+                    String message = body.getMessage();
+                    if (message == null || message.trim().isEmpty()) {
+                        message = fallbackMessage != null ? fallbackMessage : "ثبت شارژ با موفقیت انجام شد";
+                    }
+                    openChargeResult(success, message);
+                } else {
+                    openChargeResult(false, "پاسخ ثبت شارژ معتبر نیست");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AddBalanceResponse> call, Throwable t) {
                 openChargeResult(false, t.getMessage());
             }
         });
