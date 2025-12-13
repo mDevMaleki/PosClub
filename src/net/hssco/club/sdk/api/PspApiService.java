@@ -3,6 +3,8 @@ package net.hssco.club.sdk.api;
 import net.hssco.club.sdk.model.GetBalanceRequestTransactionCommand;
 import net.hssco.club.sdk.model.GetBalanceRequestTransactionResult;
 import net.hssco.club.sdk.model.GetBalanceResponse;
+import net.hssco.club.sdk.model.AddBalanceResponse;
+import net.hssco.club.sdk.model.AddBalanceWithPanCommand;
 import net.hssco.club.sdk.model.LocalRequestClubCardChargeCommand;
 import net.hssco.club.sdk.model.LocalRequestClubCardChargeResult;
 import net.hssco.club.sdk.model.PspSaleRequestTransactionCommand;
@@ -16,6 +18,7 @@ import net.hssco.club.sdk.model.VerifyLocalRequestClubCardChargResult;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Headers;
+import retrofit2.http.PUT;
 import retrofit2.http.POST;
 
 /**
@@ -42,4 +45,8 @@ public interface PspApiService {
     @Headers("Content-Type: application/json")
     @POST("/api/psp/club/charge/verify")
     Call<VerifyLocalRequestClubCardChargResult> verifyCharge(@Body VerifyLocalRequestClubCardChargeCommand request);
+
+    @Headers("Content-Type: application/json")
+    @PUT("/api/psp/addBalance")
+    Call<AddBalanceResponse> addBalance(@Body AddBalanceWithPanCommand request);
 }
