@@ -232,9 +232,17 @@ public class AmountActivity extends Activity {
             @Override
             public void onResponse(Call<VerifyLocalRequestClubCardChargResult> call,
                                    Response<VerifyLocalRequestClubCardChargResult> response) {
-                boolean success = response.isSuccessful() && chargeResult != null &&
-                        "0000".equals(chargeResult.getResponsStatus());
-                String message = chargeResult != null ? getPersianMessageForStatus(chargeResult.getResponsStatus()) : "خطای نامعلوم";
+                VerifyLocalRequestClubCardChargResult verifyBody = response.body();
+                String verifyStatus = verifyBody != null ? verifyBody.getResponsStatus() : null;
+
+                boolean success = response.isSuccessful() && "0000".equals(verifyStatus);
+                String message = getPersianMessageForStatus(verifyStatus);
+
+                // اگر وریفای موفق نبود ولی پاسخ شارژ اولیه داشتیم، پیام اولیه را نمایش بدهیم
+                if (!success && chargeResult != null && chargeResult.getResponsStatus() != null) {
+                    message = getPersianMessageForStatus(chargeResult.getResponsStatus());
+                }
+
                 openChargeResult(success, message);
             }
 
@@ -368,7 +376,9 @@ public class AmountActivity extends Activity {
 
     // ----------- پیغام فارسی برای کد پاسخ PSP -------------
     private String getPersianMessageForStatus(String status) {
-        switch (status) {
+        if (status == null) return "خطای نامعلوم";
+
+        switch (status.trim()) {
             case "0000": return "عملیات موفق";
             case "0001": return "ترمینال نامعتبر یا غیرفعال است";
             case "0002": return "شعبه نامعتبر یا غیرفعال است";
