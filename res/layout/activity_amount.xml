@@ -7,17 +7,22 @@
     android:layoutDirection="rtl"
     android:textDirection="rtl">
 
-    <LinearLayout
-        android:id="@+id/rootContainer"
+    <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:orientation="vertical"
-        android:padding="16dp"
-        android:gravity="top|center_horizontal"
+        android:fillViewport="true"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:id="@+id/rootContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:gravity="top|center_horizontal">
 
         <!-- هدر بالا: آیکن سبد + عنوان خرید + فلش -->
         <LinearLayout
@@ -227,6 +232,8 @@
 
         </LinearLayout>
 
-    </LinearLayout>
+        </LinearLayout>
+
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
