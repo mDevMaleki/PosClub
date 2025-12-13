@@ -1,6 +1,5 @@
 package net.hssco.club;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
@@ -21,7 +20,7 @@ import java.util.Locale;
 
 import net.hssco.club.data.model.Payment;
 
-public class PaymentResultActivity extends Activity {
+public class PaymentResultActivity extends BaseActivity {
 
     private TextView txtTitle, txtSubTitle;
     private TextView txtClub, txtBranch, txtAmount, txtDate, txtTime,
