@@ -93,10 +93,7 @@ public class WelcomeActivity extends Activity {
                 case MSG_CARD:
                     String pan = msg.getData().getString("PAN");
                     currentCard = pan;
-                    Intent i = new Intent(WelcomeActivity.this, SelectOperationActivity.class);
-                    i.putExtra("PAN", currentCard);
-                    startActivity(i);
-                    finish();
+                    tryConnectToServerAndNavigate();
                     break;
 
                 case MSG_STATUS:
@@ -281,6 +278,60 @@ public class WelcomeActivity extends Activity {
         } catch (Exception e) {
             Toast.makeText(this, "امکان اجرای پرداخت وجود ندارد", Toast.LENGTH_SHORT).show();
         }
+    }
+
+
+    private boolean canConnectToServer() {
+        HttpURLConnection connection = null;
+        BufferedReader reader = null;
+        try {
+            String urlStr = getBaseUrl() + "/api/Pos/GetMerchantInformation?id=1";
+            URL url = new URL(urlStr);
+
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setConnectTimeout(5000);
+            connection.setReadTimeout(5000);
+            connection.setRequestProperty("accept", "text/plain");
+
+            InputStream in = connection.getInputStream();
+            reader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
+
+            // خواندن حداقل بخشی از پاسخ برای اطمینان از دریافت داده
+            String line = reader.readLine();
+            return line != null && line.length() > 0;
+        } catch (Exception e) {
+            return false;
+        } finally {
+            try { if (reader != null) reader.close(); } catch (Exception ignored) {}
+            if (connection != null) connection.disconnect();
+        }
+    }
+
+    private void tryConnectToServerAndNavigate() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                boolean connected = canConnectToServer();
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (connected) {
+                            Intent i = new Intent(WelcomeActivity.this, SelectOperationActivity.class);
+                            i.putExtra("PAN", currentCard);
+                            startActivity(i);
+                            finish();
+                        } else {
+                            statusTv.setText("عدم اتصال به سرور");
+                            Toast.makeText(WelcomeActivity.this,
+                                    "عدم اتصال به سرور",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        }).start();
     }
 
 
