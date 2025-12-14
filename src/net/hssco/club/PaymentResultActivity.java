@@ -128,9 +128,7 @@ public class PaymentResultActivity extends Activity {
             }
         }
 
-        if (trackingText == null || trackingText.trim().isEmpty()) {
-            trackingText = generateRandomTrackingCode();
-        }
+        trackingText = generateRandomTrackingCode();
 
         applyDataToViews();
 
@@ -223,10 +221,8 @@ public class PaymentResultActivity extends Activity {
     }
 
     private String generateRandomTrackingCode() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault());
-        String timestampPart = sdf.format(new Date());
-        int randomPart = 1000 + new Random().nextInt(9000);
-        return timestampPart + randomPart;
+        int randomCode = 100000 + new Random().nextInt(900000);
+        return String.valueOf(randomCode);
     }
 
     private void setupButtons() {
