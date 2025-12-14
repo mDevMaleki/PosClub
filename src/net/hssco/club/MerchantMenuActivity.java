@@ -1,6 +1,5 @@
 package net.hssco.club;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -10,7 +9,7 @@ import android.widget.Toast;
 
 import net.hssco.club.NavigationHelper;
 
-public class MerchantMenuActivity extends Activity {
+public class MerchantMenuActivity extends BaseActivity {
 
     private Button btnPrintReceipt;
     private Button btnLastTransaction;

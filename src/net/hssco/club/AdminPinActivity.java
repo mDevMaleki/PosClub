@@ -1,6 +1,5 @@
 package net.hssco.club;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -14,7 +13,7 @@ import java.security.MessageDigest;
 
 import net.hssco.club.NavigationHelper;
 
-public class AdminPinActivity extends Activity {
+public class AdminPinActivity extends BaseActivity {
 
     private TextView txtPin;
     private StringBuilder pinBuilder = new StringBuilder();

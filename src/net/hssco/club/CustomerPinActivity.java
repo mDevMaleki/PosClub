@@ -1,6 +1,5 @@
 package net.hssco.club;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,7 +29,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CustomerPinActivity extends Activity {
+public class CustomerPinActivity extends BaseActivity {
 
     private static final String TAG = "CustomerPinActivity";
 

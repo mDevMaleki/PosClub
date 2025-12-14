@@ -1,6 +1,5 @@
 package net.hssco.club;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -20,7 +19,7 @@ import java.security.MessageDigest;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class EditCustomerActivity extends Activity {
+public class EditCustomerActivity extends BaseActivity {
 
     private EditText edtName;
     private EditText edtFamily;

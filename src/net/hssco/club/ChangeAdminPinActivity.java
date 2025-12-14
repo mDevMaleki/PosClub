@@ -1,6 +1,5 @@
 package net.hssco.club;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -12,7 +11,7 @@ import net.hssco.club.NavigationHelper;
 
 import java.security.MessageDigest;
 
-public class ChangeAdminPinActivity extends Activity {
+public class ChangeAdminPinActivity extends BaseActivity {
 
     private EditText edtCurrent;
     private EditText edtNewPin;

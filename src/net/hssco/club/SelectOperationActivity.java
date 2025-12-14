@@ -2,10 +2,9 @@ package net.hssco.club;
 
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 
-public class SelectOperationActivity extends AppCompatActivity {
+public class SelectOperationActivity extends BaseAppCompatActivity {
 
     private View btnBuy;
     private View btnBalance;
@@ -84,9 +83,7 @@ public class SelectOperationActivity extends AppCompatActivity {
         // برگشت
         // -----------------------------
         imgBack.setOnClickListener(v -> {
-            Intent i = new Intent(SelectOperationActivity.this, WelcomeActivity.class);
-            startActivity(i);
-            finish();
+            NavigationHelper.goToWelcome(SelectOperationActivity.this);
         });
     }
 
