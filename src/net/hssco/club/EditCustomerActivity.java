@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import net.hssco.club.NavigationHelper;
+
 import org.json.JSONObject;
 
 import java.io.BufferedWriter;
@@ -74,8 +76,13 @@ public class EditCustomerActivity extends Activity {
             fetchCustomerData(pan);
         }
 
-        btnCancel.setOnClickListener(v -> finish());
+        btnCancel.setOnClickListener(v -> NavigationHelper.goToWelcome(EditCustomerActivity.this));
         btnSave.setOnClickListener(v -> sendUpdate());
+    }
+
+    @Override
+    public void onBackPressed() {
+        NavigationHelper.goToWelcome(this);
     }
 
     // نمایش دیالوگ تاریخ

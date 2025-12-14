@@ -21,6 +21,7 @@ import java.util.Locale;
 import java.util.Random;
 
 import net.hssco.club.data.model.Payment;
+import net.hssco.club.NavigationHelper;
 
 public class PaymentResultActivity extends Activity {
 
@@ -234,7 +235,7 @@ public class PaymentResultActivity extends Activity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        finish();
+                        NavigationHelper.goToWelcome(PaymentResultActivity.this);
                     }
                 }
         );
@@ -293,5 +294,10 @@ public class PaymentResultActivity extends Activity {
         } catch (Exception e) {
             Toast.makeText(this, "خطا در چاپ رسید", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        NavigationHelper.goToWelcome(this);
     }
 }

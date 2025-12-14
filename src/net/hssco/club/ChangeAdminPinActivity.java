@@ -177,4 +177,9 @@ public class ChangeAdminPinActivity extends Activity {
                 .replace("٨", "8")
                 .replace("٩", "9");
     }
+
+    @Override
+    public void onBackPressed() {
+        NavigationHelper.goToWelcome(this);
+    }
 }

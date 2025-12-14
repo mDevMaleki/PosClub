@@ -35,7 +35,7 @@ public class MerchantMenuActivity extends Activity {
         imgBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                NavigationHelper.goToWelcome(MerchantMenuActivity.this);
             }
         });
         btnPrintReceipt.setOnClickListener(new View.OnClickListener() {
@@ -93,5 +93,10 @@ public class MerchantMenuActivity extends Activity {
                 NavigationHelper.goToWelcome(MerchantMenuActivity.this);
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        NavigationHelper.goToWelcome(this);
     }
 }
