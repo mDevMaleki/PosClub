@@ -294,6 +294,13 @@ public class WelcomeActivity extends Activity {
             connection.setReadTimeout(5000);
             connection.setRequestProperty("accept", "text/plain");
 
+            int responseCode = connection.getResponseCode();
+
+            // اگر پاسخ موفق بود، دیگر نیاز نیست حتماً محتوایی دریافت شده باشد
+            if (responseCode >= 200 && responseCode < 300) {
+                return true;
+            }
+
             InputStream in = connection.getInputStream();
             reader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
 
