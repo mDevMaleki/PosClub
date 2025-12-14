@@ -35,6 +35,8 @@ public class CustomerPinActivity extends Activity {
     private static final String TAG = "CustomerPinActivity";
 
     private TextView txtPin;
+    private View loadingOverlay;
+    private TextView txtLoadingMessage;
     private StringBuilder pinBuilder = new StringBuilder();
 
     private String pan;
@@ -52,6 +54,8 @@ public class CustomerPinActivity extends Activity {
         setContentView(R.layout.activity_customer_pin);
 
         txtPin = findViewById(R.id.txtPin);
+        loadingOverlay = findViewById(R.id.loadingOverlay);
+        txtLoadingMessage = findViewById(R.id.txtLoadingMessage);
 
         pan    = getIntent().getStringExtra("pan");
         amount = getIntent().getStringExtra("amount");
@@ -150,6 +154,8 @@ public class CustomerPinActivity extends Activity {
 
         String normalizedPin = normalizeDigits(pin);
 
+        showLoading("در حال دریافت اطلاعات از سرور...");
+
         GetBalanceRequestTransactionCommand command = new GetBalanceRequestTransactionCommand(
                 System.currentTimeMillis(),
                 100,
@@ -194,6 +200,8 @@ public class CustomerPinActivity extends Activity {
         final String stan = generateStan();
         final long amountValue = parseAmount(amount);
         String pinToSend = sha1(normalizeDigits(pin));
+
+        showLoading("در حال ارسال تراکنش...");
 
         PspSaleRequestTransactionCommand command = new PspSaleRequestTransactionCommand(
                 System.currentTimeMillis(),
@@ -251,6 +259,8 @@ public class CustomerPinActivity extends Activity {
         PspApiService service = createApiService();
         if (service == null) { openResultScreen(false,"buy",null,"آدرس سرور نامعتبر است",null); return; }
 
+        showLoading("در حال تایید تراکنش...");
+
         PspVerifySaleRequestTransactionCommand verifyCommand = new PspVerifySaleRequestTransactionCommand(
                 System.currentTimeMillis(),
                 100,
@@ -286,6 +296,7 @@ public class CustomerPinActivity extends Activity {
     }
 
     private void openResultScreen(boolean success, String type, String amountValue, String message, String tracking) {
+        hideLoading();
         Intent i = new Intent(CustomerPinActivity.this, PaymentResultActivity.class);
         i.putExtra("status", success ? "success" : "fail");
         i.putExtra("type", type);
@@ -352,6 +363,25 @@ public class CustomerPinActivity extends Activity {
 
     private void showError(final String message) {
         runOnUiThread(() -> Toast.makeText(CustomerPinActivity.this,message,Toast.LENGTH_LONG).show());
+    }
+
+    private void showLoading(final String message) {
+        runOnUiThread(() -> {
+            if (txtLoadingMessage != null && message != null) {
+                txtLoadingMessage.setText(message);
+            }
+            if (loadingOverlay != null) {
+                loadingOverlay.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+    private void hideLoading() {
+        runOnUiThread(() -> {
+            if (loadingOverlay != null) {
+                loadingOverlay.setVisibility(View.GONE);
+            }
+        });
     }
 
     private String getPersianMessageForStatus(String status) {
