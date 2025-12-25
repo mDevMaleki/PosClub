@@ -213,6 +213,18 @@
             android:layout_width="match_parent"
             android:layout_height="12dp" />
 
+        <!-- قالب‌های داینامیک -->
+        <Button
+            android:id="@+id/btnTemplateBuilder"
+            style="@style/SajedButton.Blue"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="قالب های داینامیک" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="12dp" />
+
         <!-- دکمه تغییر رمز -->
         <Button
             android:id="@+id/btnChangePinMerchant"

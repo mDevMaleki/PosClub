@@ -52,6 +52,7 @@
         <activity android:name=".WelcomeActivity" android:theme="@style/AppTheme.FullScreen"/>
         <activity android:name=".SelectOperationActivity" android:theme="@style/AppTheme.FullScreen" />
         <activity android:name=".AmountActivity" android:theme="@style/AppTheme.FullScreen" />
+        <activity android:name=".TemplateBuilderActivity" android:theme="@style/Theme.SajedPOS" />
 
 
     </application>

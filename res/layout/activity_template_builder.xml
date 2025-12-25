@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_main_gradient">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:layoutDirection="rtl"
+        android:textDirection="rtl">
+
+        <!-- نوار بالا -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:orientation="horizontal"
+            android:background="@android:color/white"
+            android:gravity="center_vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
+            <ImageView
+                android:id="@+id/imgBack"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/backicon"
+                android:contentDescription="@string/app_name" />
+
+            <TextView
+                android:id="@+id/txtTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="قالب های داینامیک"
+                android:textColor="#CC0000"
+                android:textSize="20sp"
+                android:gravity="center"
+                android:fontFamily="@font/iransansxdemibold" />
+            <ImageView
+                android:id="@+id/imgTemplateIcon"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/customermenu"
+                android:contentDescription="@string/app_name" />
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="12dp" />
+
+        <TextView
+            android:id="@+id/txtIntro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="یکی از قالب ها را انتخاب کنید و با کشیدن آیتم ها، نسخه داینامیک دلخواه خود را بسازید."
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:fontFamily="@font/iransansxdemibold"
+            android:padding="8dp" />
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:id="@+id/layoutTemplateButtons"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical" />
+        </HorizontalScrollView>
+
+        <TextView
+            android:id="@+id/txtSelectedTemplate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="-"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:fontFamily="@font/iransansxdemibold"
+            android:padding="4dp" />
+
+        <TextView
+            android:id="@+id/txtTemplateDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="توضیحات قالب"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:fontFamily="@font/iransansxdemibold"
+            android:padding="4dp" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:gravity="center_vertical">
+
+            <!-- پالت آیتم ها -->
+            <LinearLayout
+                android:id="@+id/paletteContainer"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.8"
+                android:orientation="vertical"
+                android:background="@drawable/bg_white_card"
+                android:padding="12dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="پالت اجزا"
+                    android:textSize="16sp"
+                    android:textColor="#222222"
+                    android:fontFamily="@font/iransansxdemibold"
+                    android:paddingBottom="4dp" />
+
+                <TextView
+                    android:id="@+id/paletteTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="عنوان بخش"
+                    android:background="@drawable/bg_btn_yellow"
+                    android:textColor="#111111"
+                    android:padding="12dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:fontFamily="@font/iransansxdemibold"
+                    android:tag="عنوان بخش"
+                    android:gravity="center" />
+
+                <TextView
+                    android:id="@+id/paletteSubtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="توضیح کوتاه"
+                    android:background="@drawable/bg_btn_white"
+                    android:textColor="#111111"
+                    android:padding="12dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:fontFamily="@font/iransansxdemibold"
+                    android:tag="توضیح کوتاه"
+                    android:gravity="center" />
+
+                <TextView
+                    android:id="@+id/palettePrice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="قیمت"
+                    android:background="@drawable/bg_btn_green"
+                    android:textColor="@android:color/white"
+                    android:padding="12dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:fontFamily="@font/iransansxdemibold"
+                    android:tag="قیمت"
+                    android:gravity="center" />
+
+                <TextView
+                    android:id="@+id/paletteAction"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="دکمه اقدام"
+                    android:background="@drawable/bg_btn_blue"
+                    android:textColor="@android:color/white"
+                    android:padding="12dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:fontFamily="@font/iransansxdemibold"
+                    android:tag="دکمه اقدام"
+                    android:gravity="center" />
+
+                <TextView
+                    android:id="@+id/paletteNote"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="یادداشت"
+                    android:background="@drawable/bg_btn_white"
+                    android:textColor="#111111"
+                    android:padding="12dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:fontFamily="@font/iransansxdemibold"
+                    android:tag="یادداشت"
+                    android:gravity="center" />
+
+            </LinearLayout>
+
+            <Space
+                android:layout_width="12dp"
+                android:layout_height="1dp" />
+
+            <!-- پیش‌نمایش و محل دراپ -->
+            <LinearLayout
+                android:id="@+id/templatePreviewHost"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.2"
+                android:background="@drawable/bg_merchant_panel"
+                android:padding="12dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txtDropStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="ابتدا یک قالب انتخاب کنید."
+                    android:textColor="#222222"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/iransansxdemibold"
+                    android:padding="4dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="12dp" />
+
+        <TextView
+            android:id="@+id/txtHelper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="روی آیتم های پالت لمس طولانی انجام دهید و سپس در بخش پیش نمایش رها کنید تا به قالب اضافه شوند."
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:fontFamily="@font/iransansxdemibold" />
+
+    </LinearLayout>
+
+</ScrollView>
